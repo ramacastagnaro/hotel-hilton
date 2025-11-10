@@ -1,0 +1,343 @@
+import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
+import AdminLayout from '../../components/Admin/AdminLayout';
+
+function AdminUsers() {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [editingUser, setEditingUser] = useState(null);
+    const [formData, setFormData] = useState({
+        full_name: '',
+        email: '',
+        password: '',
+        role: 'operador'
+    });
+    
+    // Obtener usuarios del backend
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+    
+    const fetchUsers = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch('http://localhost:4000/api/admin/operators');
+            
+            if (!response.ok) {
+                throw new Error('Error al obtener usuarios');
+            }
+            
+            const data = await response.json();
+            setUsers(data);
+            setLoading(false);
+            
+        } catch (err) {
+            console.error('Error al cargar usuarios:', err);
+            setError(err.message);
+            setLoading(false);
+        }
+    };
+    
+    if (loading) {
+        return (
+            <AdminLayout>
+                <div className="flex justify-center items-center h-64">
+                    <div className="text-center">
+                        <i className="fas fa-spinner fa-spin text-4xl text-white mb-4"></i>
+                        <p className="text-white">Cargando usuarios...</p>
+                    </div>
+                </div>
+            </AdminLayout>
+        );
+    }
+    
+    if (error) {
+        return (
+            <AdminLayout>
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    <p><strong>Error:</strong> {error}</p>
+                    <button 
+                        onClick={fetchUsers}
+                        className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                        Reintentar
+                    </button>
+                </div>
+            </AdminLayout>
+        );
+    }
+
+    const getRoleBadgeColor = (role) => {
+        switch (role) {
+            case 'Admin':
+                return 'bg-red-600 text-white';
+            case 'Operador':
+                return 'bg-purple-600 text-white';
+            default:
+                return 'bg-blue-600 text-white';
+        }
+    };
+
+    const getInitials = (name) => {
+        return name.split(' ').map(n => n[0]).join('').toUpperCase();
+    };
+
+    const getAvatarColor = (id) => {
+        const colors = [
+            'from-blue-500 to-blue-700',
+            'from-purple-500 to-purple-700',
+            'from-red-500 to-red-700',
+            'from-green-500 to-green-700',
+            'from-yellow-500 to-yellow-700'
+        ];
+        return colors[id % colors.length];
+    };
+
+    const handleNewUser = () => {
+        setEditingUser(null);
+        setFormData({
+            full_name: '',
+            email: '',
+            password: '',
+            role: 'operador'
+        });
+        setShowModal(true);
+    };
+    
+    const handleEdit = (user) => {
+        setEditingUser(user);
+        setFormData({
+            full_name: user.full_name,
+            email: user.email,
+            password: '',
+            role: user.role
+        });
+        setShowModal(true);
+    };
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        // Validar contraseña para nuevos usuarios
+        if (!editingUser && formData.password.length < 6) {
+            alert('❌ La contraseña debe tener al menos 6 caracteres');
+            return;
+        }
+        
+        try {
+            if (editingUser) {
+                // Actualizar usuario existente
+                const response = await fetch(`http://localhost:4000/api/admin/operators/${editingUser.operator_id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) throw new Error('Error al actualizar usuario');
+                
+                alert('Usuario actualizado correctamente');
+            } else {
+                // Crear nuevo usuario
+                const response = await fetch('http://localhost:4000/api/admin/operators', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) throw new Error('Error al crear usuario');
+                
+                alert('✅ Usuario creado correctamente en Firebase y Supabase.\n\nEl usuario ya puede iniciar sesión.');
+            }
+            
+            setShowModal(false);
+            fetchUsers(); // Recargar lista
+            
+        } catch (err) {
+            console.error('Error al guardar usuario:', err);
+            alert('Error al guardar usuario: ' + err.message);
+        }
+    };
+    
+    const handleDelete = async (operatorId) => {
+        if (!window.confirm('¿Estás seguro de eliminar este usuario?')) return;
+        
+        try {
+            const response = await fetch(`http://localhost:4000/api/admin/operators/${operatorId}`, {
+                method: 'DELETE'
+            });
+            
+            if (!response.ok) throw new Error('Error al eliminar usuario');
+            
+            alert('Usuario eliminado correctamente');
+            fetchUsers(); // Recargar lista
+            
+        } catch (err) {
+            console.error('Error al eliminar usuario:', err);
+            alert('Error al eliminar usuario: ' + err.message);
+        }
+    };
+
+    return (
+        <AdminLayout>
+            <Helmet>
+                <title>Gestión de Usuarios - Panel de Administración</title>
+            </Helmet>
+
+            {/* Header con botón de nuevo usuario */}
+            <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                    <i className="fas fa-users text-white text-3xl"></i>
+                    <h1 className="text-3xl font-bold text-white">Gestión de Usuarios ({users.length})</h1>
+                </div>
+                <button
+                    onClick={handleNewUser}
+                    className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2">
+                    <i className="fas fa-plus"></i>
+                    <span>Nuevo Usuario</span>
+                </button>
+            </div>
+
+            {/* Lista de usuarios */}
+            <div className="space-y-4">
+                {users.map((user) => (
+                    <div
+                        key={user.operator_id}
+                        className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-6 shadow-xl border border-cyan-700/30 hover:border-cyan-500/50 transition-all duration-300">
+                        <div className="flex items-center justify-between">
+                            {/* Info del usuario */}
+                            <div className="flex items-center gap-4">
+                                {/* Avatar */}
+                                <div className={`w-16 h-16 bg-gradient-to-br ${getAvatarColor(user.operator_id)} rounded-full flex items-center justify-center shadow-lg`}>
+                                    <span className="text-white font-bold text-xl">{getInitials(user.full_name)}</span>
+                                </div>
+
+                                {/* Detalles */}
+                                <div>
+                                    <div className="flex items-center gap-3 mb-1">
+                                        <h3 className="text-white font-bold text-lg">{user.full_name}</h3>
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${getRoleBadgeColor(user.role)}`}>
+                                            {user.role}
+                                        </span>
+                                    </div>
+                                    <p className="text-gray-400 text-sm">{user.email}</p>
+                                    <p className="text-gray-500 text-xs mt-1">
+                                        <i className="fas fa-id-badge text-gray-600 mr-2"></i>
+                                        ID: {user.operator_id}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Información adicional y acciones */}
+                            <div className="flex items-center gap-6">
+                                {/* Fecha de registro */}
+                                <div className="text-right">
+                                    <p className="text-gray-400 text-sm">Registrado:</p>
+                                    <p className="text-white font-semibold text-sm">{new Date(user.created_at).toLocaleString('es-AR')}</p>
+                                    <p className="text-gray-500 text-xs mt-1">
+                                        Rol: {user.role}
+                                    </p>
+                                </div>
+
+                                {/* Botones de acción */}
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => handleEdit(user)}
+                                        className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2">
+                                        <i className="fas fa-edit"></i>
+                                        <span>Editar</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(user.operator_id)}
+                                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2">
+                                        <i className="fas fa-trash"></i>
+                                        <span>Eliminar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Modal para crear/editar usuario */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 max-w-md w-full shadow-2xl border border-cyan-700/30 animate-fadeIn">
+                        <h2 className="text-2xl font-bold text-white mb-6">
+                            {editingUser ? 'Editar Usuario' : 'Nuevo Usuario'}
+                        </h2>
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-gray-300 font-semibold mb-2">Nombre Completo</label>
+                                <input
+                                    type="text"
+                                    value={formData.full_name}
+                                    onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all"
+                                    placeholder="Ej: Juan Pérez"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-300 font-semibold mb-2">Email</label>
+                                <input
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all"
+                                    placeholder="usuario@email.com"
+                                    required
+                                />
+                            </div>
+
+                            {!editingUser && (
+                                <div>
+                                    <label className="block text-gray-300 font-semibold mb-2">Contraseña (mínimo 6 caracteres)</label>
+                                    <input
+                                        type="password"
+                                        value={formData.password}
+                                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                                        className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all"
+                                        placeholder="Mínimo 6 caracteres"
+                                        minLength={6}
+                                        required
+                                    />
+                                </div>
+                            )}
+
+                            <div>
+                                <label className="block text-gray-300 font-semibold mb-2">Rol</label>
+                                <select
+                                    value={formData.role}
+                                    onChange={(e) => setFormData({...formData, role: e.target.value})}
+                                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all">
+                                    <option value="operador">Operador</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+
+                            <div className="flex gap-3 mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowModal(false)}
+                                    className="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all">
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="flex-1 px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold rounded-xl transition-all shadow-lg">
+                                    {editingUser ? 'Guardar' : 'Crear'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </AdminLayout>
+    );
+}
+
+export default AdminUsers;

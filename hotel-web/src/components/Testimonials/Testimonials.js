@@ -1,0 +1,71 @@
+
+// Datos de ejemplo para los testimonios
+const testimonialsData = [
+    {
+        id: 1,
+        name: 'Ana García',
+        location: 'Buenos Aires, Argentina',
+        // Puedes usar una imagen genérica de avatar si quieres, o dejarlo sin imagen
+        // avatarUrl: '/img/avatars/ana.jpg',
+        quote: '¡Una experiencia inolvidable! La atención al detalle y la amabilidad del personal hicieron nuestra estadía perfecta. Las vistas desde la habitación eran impresionantes.'
+    },
+    {
+        id: 2,
+        name: 'Carlos Fernández',
+        location: 'Santiago, Chile',
+        quote: 'El hotel superó nuestras expectativas. Las instalaciones son modernas, la comida deliciosa y la ubicación es inmejorable. Definitivamente volveremos.'
+    },
+    {
+        id: 3,
+        name: 'Sofia Rossi',
+        location: 'São Paulo, Brasil',
+        quote: 'Perfecto para un viaje de negocios. El Wi-Fi era excelente, la habitación cómoda y el servicio a la habitación rápido y eficiente. Muy recomendable.'
+    }
+];
+
+function Testimonials() {
+    return (
+        <section className="bg-gradient-to-b from-white to-gray-50 py-20">
+            <div className="container mx-auto px-4">
+                <div className="text-center mb-16 animate-fadeIn">
+                    <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                        Lo que dicen nuestros <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Huéspedes</span>
+                    </h2>
+                    <p className="text-gray-600 text-lg max-w-2xl mx-auto">Experiencias reales de quienes confiaron en nosotros</p>
+                    <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mt-4 rounded-full"></div>
+                </div>
+                
+                {/* Usamos grid para las columnas */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {testimonialsData.map((testimonial, index) => (
+                        <div key={testimonial.id} className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl flex flex-col transform hover:-translate-y-2 transition-all duration-300 border border-gray-100 group" style={{animationDelay: `${index * 0.1}s`}}>
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                                    <span className="text-white font-bold text-xl">{testimonial.name[0]}</span>
+                                </div>
+                                <div className="flex gap-1">
+                                    {[...Array(5)].map((_, i) => (
+                                        <i key={i} className="fas fa-star text-yellow-400 text-sm"></i>
+                                    ))}
+                                </div>
+                            </div>
+                            <i className="fas fa-quote-left text-blue-500 text-3xl mb-4 opacity-20 group-hover:opacity-40 transition-opacity duration-300"></i>
+                            <p className="text-gray-700 italic mb-6 flex-grow leading-relaxed">"{testimonial.quote}"</p>
+                            
+                            {/* Nombre y ubicación */}
+                            <div className="mt-auto border-t border-gray-100 pt-4">
+                                <p className="font-bold text-gray-800 text-lg">{testimonial.name}</p>
+                                <p className="text-sm text-gray-500 flex items-center gap-2 mt-1">
+                                    <i className="fas fa-map-marker-alt text-blue-500"></i>
+                                    {testimonial.location}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+}
+
+export default Testimonials;

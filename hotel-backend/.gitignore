@@ -1,0 +1,5 @@
+# Archivo de secretos
+.env
+firebase-admin-key.json
+# Carpeta de paquetes (se reinstala con npm install)
+node_modules
