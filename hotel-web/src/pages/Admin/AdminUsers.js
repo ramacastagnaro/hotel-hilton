@@ -17,6 +17,7 @@ function AdminUsers() {
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [editingUser, setEditingUser] = useState(null);
+    const [isSaving, setIsSaving] = useState(false); // BTN-4: disable submit while the request is in flight
     const [formData, setFormData] = useState({
         full_name: '',
         email: '',
@@ -121,13 +122,15 @@ function AdminUsers() {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+        if (isSaving) return; // BTN-4: guard against re-entry while saving
+
         // Validar contraseña para nuevos usuarios
         if (!editingUser && formData.password.length < 6) {
             alert('❌ La contraseña debe tener al menos 6 caracteres');
             return;
         }
         
+        setIsSaving(true);
         try {
             if (editingUser) {
                 // Actualizar usuario existente
@@ -147,6 +150,8 @@ function AdminUsers() {
         } catch (err) {
             console.error('Error al guardar usuario:', err);
             alert('Error al guardar usuario: ' + err.message);
+        } finally {
+            setIsSaving(false);
         }
     };
     
@@ -319,8 +324,15 @@ function AdminUsers() {
                                 </button>
                                 <button
                                     type="submit"
+                                    disabled={isSaving}
                                     className={buttonStyles({ variant: 'primary', className: 'flex-1' })}>
-                                    {editingUser ? 'Guardar' : 'Crear'}
+                                    {isSaving ? (
+                                        <>
+                                            <i className="fas fa-spinner fa-spin"></i> Guardando...
+                                        </>
+                                    ) : (
+                                        editingUser ? 'Guardar' : 'Crear'
+                                    )}
                                 </button>
                             </div>
                         </form>

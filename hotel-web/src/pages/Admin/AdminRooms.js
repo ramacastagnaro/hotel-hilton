@@ -18,6 +18,7 @@ function AdminRooms() {
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [editingRoom, setEditingRoom] = useState(null);
+    const [isSaving, setIsSaving] = useState(false); // BTN-4: disable submit while the request is in flight
     const [formData, setFormData] = useState({
         name: '',
         category: 'Estándar',
@@ -88,7 +89,9 @@ function AdminRooms() {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        
+        if (isSaving) return; // BTN-4: guard against re-entry while saving
+
+        setIsSaving(true);
         try {
             // Preservar los datos existentes (JSONB) al editar: no se deben
             // destruir services/tariffs/images ni enviar tariffs como objeto.
@@ -116,6 +119,8 @@ function AdminRooms() {
         } catch (err) {
             console.error('Error al guardar:', err);
             alert('Error al guardar la habitación');
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -321,8 +326,15 @@ function AdminRooms() {
                                 </button>
                                 <button
                                     type="submit"
+                                    disabled={isSaving}
                                     className={buttonStyles({ variant: 'primary', className: 'flex-1' })}>
-                                    {editingRoom ? 'Guardar Cambios' : 'Crear Habitación'}
+                                    {isSaving ? (
+                                        <>
+                                            <i className="fas fa-spinner fa-spin"></i> Guardando...
+                                        </>
+                                    ) : (
+                                        editingRoom ? 'Guardar Cambios' : 'Crear Habitación'
+                                    )}
                                 </button>
                             </div>
                         </form>

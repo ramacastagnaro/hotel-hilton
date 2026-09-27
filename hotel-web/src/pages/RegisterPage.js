@@ -11,9 +11,11 @@ function RegisterPage() {
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(''); //msj de error
+    const [isSaving, setIsSaving] = useState(false); // BTN-4: disable submit while the request is in flight
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
+        if (isSaving) return; // BTN-4: guard against re-entry while saving
         setError(''); //limpiar msj de error
         
         if(password !== confirmPassword){
@@ -25,6 +27,7 @@ function RegisterPage() {
             setError('La contraseña debe tener al menos 6 caracteres.');
         }
 
+        setIsSaving(true);
         try{
             //Llamamos a Firebase para crear el user
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -42,6 +45,8 @@ function RegisterPage() {
             } else {
                 setError('Ocurrió un error durante el registro. Inténtalo de nuevo.');
             }
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -115,9 +120,19 @@ function RegisterPage() {
                     <div className="pt-2">
                         <button
                             type="submit"
+                            disabled={isSaving}
                             className={buttonStyles({ variant: 'primary', size: 'lg', className: 'w-full' })}>
-                            <span>Registrarse</span>
-                            <i className="fas fa-user-check"></i>
+                            {isSaving ? (
+                                <>
+                                    <i className="fas fa-spinner fa-spin"></i>
+                                    <span>Guardando...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span>Registrarse</span>
+                                    <i className="fas fa-user-check"></i>
+                                </>
+                            )}
                         </button>
                     </div>
                 </form>
