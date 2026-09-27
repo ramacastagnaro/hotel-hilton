@@ -73,11 +73,13 @@ function AdminUsers() {
     }
 
     const getRoleBadgeColor = (role) => {
-        switch (role) {
-            case 'Admin':
+        switch ((role || '').toLowerCase()) {
+            case 'admin':
                 return 'bg-red-600 text-white';
-            case 'Operador':
+            case 'operador':
                 return 'bg-navy-600 text-white';
+            case 'demo':
+                return 'bg-gold-500 text-navy-950';
             default:
                 return 'bg-blue-600 text-white';
         }
@@ -312,6 +314,7 @@ function AdminUsers() {
                                     className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all">
                                     <option value="operador">Operador</option>
                                     <option value="admin">Admin</option>
+                                    <option value="demo">Demo (solo lectura)</option>
                                 </select>
                             </div>
 
