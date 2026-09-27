@@ -59,7 +59,7 @@ function ServicesPage() {
                 <title>Nuestros Servicios - Hotel Hilton</title>
             </Helmet>
             <div className="text-center mb-12">
-                <h1 className="text-4xl font-bold text-gray-800">Servicios Exclusivos</h1>
+                <h1 className="text-4xl font-serif font-bold tracking-tight text-gray-800">Servicios Exclusivos</h1>
                 <p className="text-gray-600 mt-2">Todo lo que necesitas para una experiencia perfecta.</p>
             </div>
 
@@ -70,7 +70,7 @@ function ServicesPage() {
                         <Slider {...sliderSettings}>
                             {service.images.map((image, index) => (
                                 <div key={index}>
-                                    <img src={image} alt={`${service.title} ${index + 1}`} className="w-full h-56 object-cover" />
+                                    <img src={image} alt={`${service.title} ${index + 1}`} loading="lazy" decoding="async" className="w-full h-56 object-cover" />
                                 </div>
                             ))}
                         </Slider>

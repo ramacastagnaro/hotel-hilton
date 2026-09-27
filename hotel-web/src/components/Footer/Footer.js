@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { HOTEL } from '../../config/hotel';
 
 function Footer() {
@@ -8,7 +9,7 @@ function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           {/* Logo y descripción */}
           <div className="col-span-1 sm:col-span-2">
-            <h3 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600 mb-4 font-serif">
+            <h3 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600 mb-4">
               {HOTEL.name}
             </h3>
             <p className="text-gray-400 leading-relaxed mb-4">
@@ -34,18 +35,18 @@ function Footer() {
           <div>
             <h4 className="text-lg font-bold text-white mb-4">Enlaces Rápidos</h4>
             <ul className="space-y-2">
-              <li><a href="/" className="text-gray-400 hover:text-gold-400 transition-colors duration-200 flex items-center gap-2">
+              <li><Link to="/" className="text-gray-400 hover:text-gold-400 transition-colors duration-200 flex items-center gap-2">
                 <i className="fas fa-chevron-right text-xs" aria-hidden="true"></i> Inicio
-              </a></li>
-              <li><a href="/habitaciones" className="text-gray-400 hover:text-gold-400 transition-colors duration-200 flex items-center gap-2">
+              </Link></li>
+              <li><Link to="/habitaciones" className="text-gray-400 hover:text-gold-400 transition-colors duration-200 flex items-center gap-2">
                 <i className="fas fa-chevron-right text-xs" aria-hidden="true"></i> Habitaciones
-              </a></li>
-              <li><a href="/servicios" className="text-gray-400 hover:text-gold-400 transition-colors duration-200 flex items-center gap-2">
+              </Link></li>
+              <li><Link to="/servicios" className="text-gray-400 hover:text-gold-400 transition-colors duration-200 flex items-center gap-2">
                 <i className="fas fa-chevron-right text-xs" aria-hidden="true"></i> Servicios
-              </a></li>
-              <li><a href="/sobre-nosotros" className="text-gray-400 hover:text-gold-400 transition-colors duration-200 flex items-center gap-2">
+              </Link></li>
+              <li><Link to="/sobre-nosotros" className="text-gray-400 hover:text-gold-400 transition-colors duration-200 flex items-center gap-2">
                 <i className="fas fa-chevron-right text-xs" aria-hidden="true"></i> Sobre Nosotros
-              </a></li>
+              </Link></li>
             </ul>
           </div>
 
@@ -71,15 +72,9 @@ function Footer() {
 
         {/* Línea divisoria */}
         <div className="border-t border-gray-700 pt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm text-center md:text-left">
-              &copy; 2025 Hotel Hilton. Todos los derechos reservados.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm">
-              <a href="/" className="text-gray-400 hover:text-gold-400 transition-colors duration-200">Política de Privacidad</a>
-              <a href="/" className="text-gray-400 hover:text-gold-400 transition-colors duration-200">Términos y Condiciones</a>
-            </div>
-          </div>
+          <p className="text-gray-400 text-sm text-center">
+            &copy; 2025 Hotel Hilton. Todos los derechos reservados.
+          </p>
         </div>
       </div>
     </footer>

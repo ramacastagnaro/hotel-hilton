@@ -9,6 +9,10 @@ export const HOTEL = {
   address: 'Av. Arenales 742, Salta, Argentina',
   phone: '+54 387 431-0000',
   email: 'HiltonHoteles@gmail.com',
+  // Hero background photo. Swap this for an on-brand asset when one is available.
+  heroImage: '/img/hero-background.jpg',
+  // Shown when a room/gallery image is missing or fails to load.
+  fallbackImage: '/img/logo-hilton.png',
   social: {
     facebook: 'https://facebook.com',
     instagram: 'https://instagram.com',

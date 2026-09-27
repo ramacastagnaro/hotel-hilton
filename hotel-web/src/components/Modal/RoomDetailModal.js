@@ -1,6 +1,9 @@
 import Slider from 'react-slick';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 function RoomDetailModal({ room, onClose }) {
+    const dialogRef = useFocusTrap(onClose);
+
     //config carrusel
     const sliderSettings = {
         dots: true,
@@ -14,12 +17,18 @@ function RoomDetailModal({ room, onClose }) {
 
     return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-lg shadow-xl w-full md:w-4/5 lg:w-3/5 max-h-[90vh] overflow-y-auto relative">
-        
+        <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="room-detail-title"
+            className="bg-white rounded-lg shadow-xl w-full md:w-4/5 lg:w-3/5 max-h-[90vh] overflow-y-auto relative">
+
             <button
+                type="button"
                 onClick={onClose}
                 aria-label="Cerrar"
-                className="sticky top-0 right-0 float-right m-4 text-gray-500 hover:text-gray-800 text-3xl z-20 bg-white rounded-full px-2">
+                className="sticky top-0 right-0 float-right m-4 text-gray-500 hover:text-gray-800 text-3xl z-20 bg-white rounded-full px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400">
                 &times;
             </button>
 
@@ -31,6 +40,8 @@ function RoomDetailModal({ room, onClose }) {
                                 <img
                                     src={image}
                                     alt={`${room.name} ${index + 1}`}
+                                    loading="lazy"
+                                    decoding="async"
                                     className="w-full h-72 object-cover"
                                 />
                             </div>
@@ -40,7 +51,7 @@ function RoomDetailModal({ room, onClose }) {
             )}
 
             <div className="p-8 pt-0">
-                <h2 className="text-3xl font-bold mb-2">{room.name}</h2>
+                <h2 id="room-detail-title" className="text-3xl font-bold mb-2">{room.name}</h2>
                 <p className="text-gray-600 text-base mb-6">{room.description}</p>
 
                 <div className="mb-6">

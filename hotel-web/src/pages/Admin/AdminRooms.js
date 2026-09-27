@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { HOTEL } from '../../config/hotel';
 import { useCanMutate } from '../../hooks/useCanMutate';
 import {
     createRoom,
@@ -183,8 +184,11 @@ function AdminRooms() {
                         {/* Imagen */}
                         <div className="relative h-48 overflow-hidden">
                             <img
-                                src={room.images?.[0] || '/img/placeholder.jpg'}
+                                src={room.images?.[0] || HOTEL.fallbackImage}
                                 alt={room.name}
+                                loading="lazy"
+                                decoding="async"
+                                onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = HOTEL.fallbackImage; }}
                                 className="w-full h-full object-cover"
                             />
                             <div className="absolute top-4 right-4 px-3 py-1 bg-navy-700 text-white font-bold rounded-full text-sm">

@@ -66,7 +66,7 @@ function Header() {
             <li className="relative">
               {currentUser ? (
                 <>
-                  <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menú de usuario" aria-expanded={isMenuOpen} className="flex items-center focus:outline-none hover:opacity-80 transition-all duration-200"> {/* abre/cerrar menu */}
+                  <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menú de usuario" aria-expanded={isMenuOpen} className="flex items-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 hover:opacity-80 transition-all duration-200"> {/* abre/cerrar menu */}
                     <div className="w-10 h-10 rounded-full bg-navy-800 text-white flex items-center justify-center font-bold text-sm mr-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                       {currentUser.email ? currentUser.email[0].toUpperCase() : 'U'}
                     </div>
@@ -122,7 +122,7 @@ function Header() {
                         </Link>
                       )}
                       
-                      <button onClick={handleLogout} className="w-full text-left block px-4 py-3 text-sm text-gray-700 hover:bg-surface-100 transition-all duration-200 rounded-lg mx-2 mt-1">
+                      <button onClick={handleLogout} className="w-full text-left block px-4 py-3 text-sm text-gray-700 hover:bg-surface-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-inset transition-all duration-200 rounded-lg mx-2 mt-1">
                         <i className="fas fa-sign-out-alt mr-3 text-danger" aria-hidden="true"></i>
                         <span className="font-medium">Cerrar Sesión</span>
                       </button>
@@ -197,7 +197,7 @@ function Header() {
                       Panel Operador
                     </Link>
                   )}
-                  <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-lg text-gray-700 font-semibold hover:bg-surface-100 transition-colors">
+                  <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-lg text-gray-700 font-semibold hover:bg-surface-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-inset transition-colors">
                     <i className="fas fa-sign-out-alt mr-3 text-danger" aria-hidden="true"></i>
                     Cerrar Sesión
                   </button>

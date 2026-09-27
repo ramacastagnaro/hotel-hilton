@@ -4,9 +4,9 @@ import { differenceInDays, format } from 'date-fns';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from 'react'; // <-- Importación de React corregida
 // import { useEffect, useState } from 'react'; // <-- Línea duplicada eliminada
-import 'react-datepicker/dist/react-datepicker.css'; //estilos
 import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { HOTEL } from '../config/hotel';
 import { useAuth } from '../context/AuthContext';
 import { auth } from '../firebase/config';
 import { createReservation } from '../services/reservationsService';
@@ -161,7 +161,7 @@ function BookingPage(){
                 <title>Confirmar Reserva - Hotel Hilton</title>
             </Helmet>
 
-            <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 sm:mb-8">¡Último paso! Confirmá tu reserva ahora</h1>
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-center text-gray-800 mb-6 sm:mb-8">¡Último paso! Confirmá tu reserva ahora</h1>
 
             <div className="lg:flex lg:gap-8">
                 {/* --- Columna Izquierda: FORMULARIO MULTI-PASO --- */}
@@ -437,7 +437,14 @@ function BookingPage(){
             {/* --- Columna Derecha: Resumen (Sidebar) --- */}
             <div className="lg:w-1/3 mt-8 lg:mt-0">
                 <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg lg:sticky lg:top-24">
-                    <img src={room.images[0]} alt={room.name} className="w-full h-40 object-cover rounded-md mb-4" />
+                    <img
+                        src={room.images?.[0] || HOTEL.fallbackImage}
+                        alt={room.name}
+                        loading="lazy"
+                        decoding="async"
+                        onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = HOTEL.fallbackImage; }}
+                        className="w-full h-40 object-cover rounded-md mb-4"
+                    />
                     <h3 className="text-xl font-bold">{room.name}</h3>
                     <p className="text-sm text-gray-500 mb-4">{tariff.name}</p>
 

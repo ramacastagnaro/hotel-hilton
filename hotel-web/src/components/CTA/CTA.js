@@ -11,7 +11,7 @@ function CTA(){
             
             <div className='container mx-auto px-4 py-8 sm:py-12 text-center relative z-10'>
                 <div className="animate-fadeIn">
-                    <h2 className='text-3xl sm:text-4xl md:text-6xl font-extrabold mb-5 sm:mb-6 drop-shadow-lg'>
+                    <h2 className='text-3xl sm:text-4xl md:text-6xl font-serif font-bold tracking-tight mb-5 sm:mb-6 drop-shadow-lg'>
                         La Habitación Perfecta te Espera
                     </h2>
                     <p className='text-base sm:text-lg md:text-xl mb-8 sm:mb-10 max-w-3xl mx-auto leading-relaxed text-navy-100'>

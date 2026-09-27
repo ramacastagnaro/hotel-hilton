@@ -1,15 +1,21 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+// Brand skin loaded AFTER the library CSS so the .rdr* overrides win.
+import '../../styles/date-range.css';
 import { useNavigate } from 'react-router-dom';
 import { HOTEL } from '../../config/hotel';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { buttonStyles } from '../../utils/buttonStyles';
 
 function SearchHero() {
     const navigate = useNavigate();
+    const searchRef = useRef(null);
+    // One month on phones, two on wider screens.
+    const isDesktop = useMediaQuery('(min-width: 768px)');
     const [showCalendar, setShowCalendar] = useState(false);
     const [showGuestSelector, setShowGuestSelector] = useState(false);
     const [dates, setDates] = useState([
@@ -23,6 +29,34 @@ function SearchHero() {
         adults: 2,
         rooms: 1,
     });
+
+    // Close the floating panels on outside click or Escape.
+    useEffect(() => {
+        if (!showCalendar && !showGuestSelector) return undefined;
+
+        const closePanels = () => {
+            setShowCalendar(false);
+            setShowGuestSelector(false);
+        };
+
+        const handleClickOutside = (event) => {
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                closePanels();
+            }
+        };
+
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') closePanels();
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [showCalendar, showGuestSelector]);
 
     const handleGuestChange = (type, operation) => {
         setGuests(prev => {
@@ -54,50 +88,62 @@ function SearchHero() {
     return (
         <div
             className="relative min-h-[85vh] sm:min-h-[75vh] bg-cover bg-center flex flex-col items-center justify-center text-white px-4 py-12"
-            style={{ backgroundImage: `url('/img/hero-background.jpg')` }}>
+            style={{ backgroundImage: `url(${HOTEL.heroImage})` }}>
 
-            <div className="absolute inset-0 bg-black/30"></div>
+            {/* Navy gradient overlay keeps the headline readable on any photo.
+                NOTE: the hero asset itself should be replaced with an on-brand
+                photo — point HOTEL.heroImage at it in src/config/hotel.js. */}
+            <div className="absolute inset-0 bg-gradient-to-b from-navy-950/80 via-navy-900/55 to-navy-950/85"></div>
             <div className="relative z-10 text-center mb-8 sm:mb-12 animate-fadeIn">
-                <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-4 sm:mb-6 drop-shadow-2xl">
+                <h1 className="text-3xl sm:text-5xl md:text-7xl font-serif font-bold tracking-tight mb-4 sm:mb-6 drop-shadow-2xl">
                   Encuentra tu Estadía Perfecta
                 </h1>
                 <p className="text-base sm:text-xl md:text-2xl drop-shadow-lg font-light tracking-wide">Reserva las mejores habitaciones al mejor precio.</p>
             </div>
 
-            <div className="relative max-w-5xl w-full">
+            <div ref={searchRef} className="relative max-w-5xl w-full">
 
                 {/* Search Bar */}
                 <div className="bg-white/95 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-2xl flex flex-col md:flex-row items-stretch md:items-center md:space-x-2 text-gray-800 border border-white/20 hover:shadow-3xl transition-all duration-300">
                     <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 px-4 py-3 w-full md:flex-grow-[2] hover:bg-gray-50 transition-all duration-200 rounded-lg">
                         <i className="fas fa-hotel text-navy-600 mr-3 text-xl" aria-hidden="true"></i>
-                        {/* --- MODIFICACIÓN AQUÍ --- */}
                         <input
                             type="text"
                             value={HOTEL.name}
                             readOnly
                             aria-label="Hotel"
-                            className="font-bold bg-transparent outline-none w-full font-serif text-base sm:text-lg text-gray-800" // <-- Añadido font-serif y text-lg
+                            className="font-bold bg-transparent outline-none w-full font-serif text-base sm:text-lg text-gray-800"
                         />
                     </div>
                     {/* calendario / oculta huesp. */}
-                    <div className="cursor-pointer px-4 py-3 border-b md:border-b-0 md:border-r border-gray-200 w-full md:flex-grow text-center md:text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group" onClick={() => { setShowCalendar(!showCalendar); setShowGuestSelector(false); }}>
+                    <button
+                        type="button"
+                        aria-expanded={showCalendar}
+                        aria-haspopup="dialog"
+                        onClick={() => { setShowCalendar(prev => !prev); setShowGuestSelector(false); }}
+                        className="cursor-pointer px-4 py-3 border-b md:border-b-0 md:border-r border-gray-200 w-full md:flex-grow text-center md:text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group">
                         <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider flex items-center justify-center md:justify-start gap-2">
                           <i className="fas fa-calendar-alt text-navy-600" aria-hidden="true"></i>
                           Entrada - Salida
                         </span>
-                        <p className="font-bold text-sm mt-2 text-gray-800">
+                        <span className="block font-bold text-sm mt-2 text-gray-800">
                             {`${format(dates[0].startDate, "dd MMM yy", { locale: es })} - ${dates[0].endDate ? format(dates[0].endDate, "dd MMM yy", { locale: es }) : 'Seleccionar'}`}
-                        </p>
-                    </div>
+                        </span>
+                    </button>
 
                     {/* muestra sector huespedes / oculta el calendario */}
-                    <div className='cursor-pointer px-4 py-3 w-full md:flex-grow text-center md:text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group' onClick={() => { setShowGuestSelector(!showGuestSelector); setShowCalendar(false); }}>
+                    <button
+                        type="button"
+                        aria-expanded={showGuestSelector}
+                        aria-haspopup="dialog"
+                        onClick={() => { setShowGuestSelector(prev => !prev); setShowCalendar(false); }}
+                        className="cursor-pointer px-4 py-3 w-full md:flex-grow text-center md:text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group">
                         <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider flex items-center justify-center md:justify-start gap-2">
                           <i className="fas fa-users text-navy-600" aria-hidden="true"></i>
                           Huéspedes
                         </span>
-                        <p className="font-bold text-sm mt-2 text-gray-800">{guestText}</p>
-                    </div>
+                        <span className="block font-bold text-sm mt-2 text-gray-800">{guestText}</span>
+                    </button>
 
                     <button onClick={handleSearch} className={buttonStyles({ variant: 'accent', size: 'lg', className: 'w-full md:w-auto mt-4 md:mt-0' })}>
                         <i className="fas fa-search text-lg" aria-hidden="true"></i> 
@@ -105,18 +151,20 @@ function SearchHero() {
                     </button>
                 </div>
 
-                {/* Calendario flotante */}
+                {/* Calendario flotante: anclado a la derecha para no salirse del
+                    viewport por la izquierda; el ancho nunca supera la pantalla. */}
                 {showCalendar && (
-                    <div className="absolute top-full mt-4 w-[calc(100vw-2rem)] max-w-full left-1/2 -translate-x-1/2 md:left-auto md:right-1/2 md:translate-x-0 z-20 shadow-2xl rounded-2xl overflow-hidden bg-white border border-gray-100 animate-fadeIn">
+                    <div className="absolute top-full mt-4 left-0 right-0 md:left-auto md:right-0 w-full md:w-auto max-w-[calc(100vw-2rem)] z-20 shadow-2xl rounded-2xl overflow-hidden bg-white border border-gray-100 animate-fadeIn">
                         <div className="overflow-x-auto">
                             <DateRange
-                                editableDateInputs={true}
+                                editableDateInputs={false}
+                                showDateDisplay={false}
                                 onChange={item => setDates([item.selection])}
                                 moveRangeOnFirstSelection={false}
                                 ranges={dates}
                                 rangeColors={["#C9A24B"]}
                                 locale={es}
-                                months={2}
+                                months={isDesktop ? 2 : 1}
                                 direction="horizontal"
                                 minDate={new Date()}
                             />
