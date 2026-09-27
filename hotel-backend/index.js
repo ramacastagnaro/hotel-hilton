@@ -4,6 +4,7 @@ import { ALLOWED_ORIGINS, PORT, REQUIRE_AUTH } from './config/env.js';
 // Side-effect import: initializes Firebase Admin on boot.
 import './lib/firebaseAdmin.js';
 import { supabase } from './lib/supabaseClient.js';
+import { requireAuth } from './middleware/auth.middleware.js';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware.js';
 import adminRoutes from './routes/admin.routes.js';
 import authRoutes from './routes/auth.routes.js';
@@ -35,9 +36,10 @@ app.use('/api/rooms', roomsRoutes);
 app.use('/api/reservations', reservationsRoutes);
 app.use('/api/logs', logsRoutes);
 
-// Admin / operator API surface.
-app.use('/api/admin', adminRoutes);
-app.use('/api/operator', operatorRoutes);
+// Admin / operator API surface. The guard is a warn-only passthrough while
+// REQUIRE_AUTH is not 'true' (spec AUTH-5 keeps the default off during rollout).
+app.use('/api/admin', requireAuth('admin'), adminRoutes);
+app.use('/api/operator', requireAuth('operador'), operatorRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

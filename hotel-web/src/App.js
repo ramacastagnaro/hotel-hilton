@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick.css";
 
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
 // Page Components
 import AboutPage from './pages/AboutPage';
@@ -38,19 +39,19 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Rutas del Panel de Administración (sin Header/Footer) */}
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/habitaciones" element={<AdminRooms />} />
-        <Route path="/admin/usuarios" element={<AdminUsers />} />
-        <Route path="/admin/reservas" element={<AdminReservations />} />
-        <Route path="/admin/estadisticas" element={<AdminStats />} />
-        <Route path="/admin/logs" element={<AdminLogs />} />
+        {/* Rutas del Panel de Administración (sin Header/Footer, protegidas) */}
+        <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/admin/habitaciones" element={<ProtectedRoute><AdminRooms /></ProtectedRoute>} />
+        <Route path="/admin/usuarios" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
+        <Route path="/admin/reservas" element={<ProtectedRoute><AdminReservations /></ProtectedRoute>} />
+        <Route path="/admin/estadisticas" element={<ProtectedRoute><AdminStats /></ProtectedRoute>} />
+        <Route path="/admin/logs" element={<ProtectedRoute><AdminLogs /></ProtectedRoute>} />
 
-        {/* Rutas del Panel de Operador (sin Header/Footer) */}
-        <Route path="/operador" element={<OperatorDashboard />} />
-        <Route path="/operador/habitaciones" element={<OperatorRooms />} />
-        <Route path="/operador/reservas" element={<OperatorReservations />} />
-        <Route path="/operador/pagos" element={<OperatorPayments />} />
+        {/* Rutas del Panel de Operador (sin Header/Footer, protegidas) */}
+        <Route path="/operador" element={<ProtectedRoute><OperatorDashboard /></ProtectedRoute>} />
+        <Route path="/operador/habitaciones" element={<ProtectedRoute><OperatorRooms /></ProtectedRoute>} />
+        <Route path="/operador/reservas" element={<ProtectedRoute><OperatorReservations /></ProtectedRoute>} />
+        <Route path="/operador/pagos" element={<ProtectedRoute><OperatorPayments /></ProtectedRoute>} />
         
         {/* Rutas públicas (con Header/Footer) */}
         <Route path="/*" element={
