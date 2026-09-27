@@ -57,10 +57,10 @@ function Header() {
     <header className="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-gray-100 transition-all duration-300">
       <div className="container mx-auto flex justify-between items-center px-6 py-4">
         <Link to="/" className="flex flex-col group">
-          <span className="text-2xl font-bold tracking-tight text-gray-800 group-hover:text-blue-700 transition-colors duration-300" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <span className="text-2xl font-bold tracking-tight text-gray-800 group-hover:text-blue-700 transition-colors duration-300 font-serif">
             Hotel Hilton
           </span>
-          <span className="text-xs text-gray-500 tracking-widest uppercase" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+          <span className="text-xs text-gray-500 tracking-widest uppercase font-sans">
             Luxury & Comfort
           </span>
         </Link>

@@ -3,6 +3,13 @@
 @tailwind utilities;
 @import 'leaflet/dist/leaflet.css';
 
+/* Tipografía base del sistema de diseño (Montserrat + navy) */
+@layer base {
+  body {
+    @apply font-sans text-navy-900 bg-surface-50 antialiased;
+  }
+}
+
 /* Animaciones personalizadas */
 @keyframes fadeIn {
   from {
