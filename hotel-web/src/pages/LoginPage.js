@@ -18,33 +18,39 @@ function LoginPage() {
         setError('');
 
         try {
-            // Primero intentar login de operador/admin
-            if (email.includes('@hotel.com')) {
-                try {
-                    const operator = await loginOperator({ email, password });
-                    console.log('Operador/Admin inició sesión:', operator);
-
-                    // Guardar datos en localStorage
-                    localStorage.setItem('operator', JSON.stringify(operator));
-
-                    // Redirigir según rol
-                    if (operator.role === 'admin') {
-                        alert('¡Bienvenido Administrador!');
-                        navigate('/admin');
-                    } else if (operator.role === 'operador') {
-                        alert('¡Bienvenido Operador!');
-                        navigate('/operador');
-                    }
-                    return;
-                } catch (operatorErr) {
-                    // Si el login de operador falla, continuamos con Firebase
-                    console.warn('Login de operador no disponible, usando Firebase:', operatorErr.message);
-                }
-            }
-            
-            // Si no es operador, usar Firebase normal
+            // Authentication always happens in Firebase first. Operators and
+            // admins are Firebase users; their ID token is then exchanged for
+            // an operator profile (and role) via the backend.
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             console.log('Usuario inició sesión:', userCredential.user);
+
+            try {
+                const idToken = await userCredential.user.getIdToken();
+                const operator = await loginOperator({ idToken });
+                console.log('Operador/Admin inició sesión:', operator);
+
+                // Guardar datos en localStorage
+                localStorage.setItem('operator', JSON.stringify(operator));
+
+                // Redirigir según rol
+                if (operator.role === 'admin') {
+                    alert('¡Bienvenido Administrador!');
+                    navigate('/admin');
+                } else if (operator.role === 'operador') {
+                    alert('¡Bienvenido Operador!');
+                    navigate('/operador');
+                } else {
+                    navigate('/');
+                }
+                return;
+            } catch (operatorErr) {
+                // 403/404 => the signed-in user is not an operator/admin.
+                if (operatorErr.status !== 403 && operatorErr.status !== 404) {
+                    throw operatorErr;
+                }
+                console.warn('El usuario no es operador/admin:', operatorErr.message);
+            }
+
             alert('¡Inicio de sesión exitoso!');
             navigate('/');
             

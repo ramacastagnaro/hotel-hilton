@@ -11,7 +11,10 @@ export const updateOperator = (operatorId, operator) =>
 export const deleteOperator = (operatorId) =>
   apiClient.del(`/api/admin/operators/${operatorId}`);
 
-// Legacy operator credential login. The backend endpoint is removed in a later
-// work unit in favour of Firebase ID-token verification; routing it here keeps
-// the call-site free of hardcoded origins until that migration lands.
-export const loginOperator = (credentials) => apiClient.post('/api/operators/login', credentials);
+// Operator session resolution. Operators authenticate with Firebase on the
+// client; this endpoint verifies the resulting ID token and returns the
+// operator profile + role. The old `/api/operators/login` endpoint is gone.
+export const loginOperator = (payload) =>
+  apiClient.post('/api/auth/operator-login', payload);
+
+export const getCurrentOperator = () => apiClient.get('/api/auth/me');
