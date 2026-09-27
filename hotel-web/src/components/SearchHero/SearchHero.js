@@ -21,16 +21,14 @@ function SearchHero() {
     ]);
     const [guests, setGuests] = useState({
         adults: 2,
-        children: 0,
         rooms: 1,
     });
 
     const handleGuestChange = (type, operation) => {
         setGuests(prev => {
             const newValue = operation === 'increase' ? prev[type] + 1 : prev[type] - 1;
-            // Asegura mínimos (1 adulto, 0 niños, 1 habitación)
+            // Asegura mínimos (1 adulto, 1 habitación)
             if (type === 'adults' && newValue < 1) return prev;
-            if (type === 'children' && newValue < 0) return prev;
             if (type === 'rooms' && newValue < 1) return prev;
             return { ...prev, [type]: newValue };
         });
@@ -51,7 +49,7 @@ function SearchHero() {
         setShowGuestSelector(false);
     };
 
-    const guestText = `${guests.adults} Adultos, ${guests.children} Niños, ${guests.rooms} Hab.`;
+    const guestText = `${guests.adults} Adultos, ${guests.rooms} Hab.`;
 
     return (
         <div
@@ -125,21 +123,13 @@ function SearchHero() {
 
                 {/* Nuevo menu flotante */}
                 {showGuestSelector && (
-                    <div className="absolute top-full mt-4 bg-white rounded-2xl shadow-2xl p-6 w-80 right-0 z-20 text-gray-800 border border-gray-100 animate-fadeIn">
+                    <div className="absolute top-full mt-4 left-1/2 -translate-x-1/2 w-[calc(100vw-2rem)] max-w-xs bg-white rounded-2xl shadow-2xl p-6 z-20 text-gray-800 border border-gray-100 animate-fadeIn">
                         <div className="flex justify-between items-center mb-5">
                             <span className="font-bold text-gray-700">Adultos</span>
                             <div className="flex items-center gap-4">
                                 <button disabled={guests.adults <= 1} onClick={() => handleGuestChange('adults', 'decrease')} aria-label="Quitar un adulto" className={buttonStyles({ variant: 'secondary', size: 'sm', className: 'w-10 h-10 !p-0 !rounded-full' })}>-</button>
                                 <span className="font-bold text-lg min-w-[30px] text-center">{guests.adults}</span>
                                 <button onClick={() => handleGuestChange('adults', 'increase')} aria-label="Agregar un adulto" className={buttonStyles({ variant: 'secondary', size: 'sm', className: 'w-10 h-10 !p-0 !rounded-full' })}>+</button>
-                            </div>
-                        </div>
-                        <div className="flex justify-between items-center mb-5">
-                            <span className="font-bold text-gray-700">Niños</span>
-                            <div className="flex items-center gap-4">
-                                <button disabled={guests.children <= 0} onClick={() => handleGuestChange('children', 'decrease')} aria-label="Quitar un niño" className={buttonStyles({ variant: 'secondary', size: 'sm', className: 'w-10 h-10 !p-0 !rounded-full' })}>-</button>
-                                <span className="font-bold text-lg min-w-[30px] text-center">{guests.children}</span>
-                                <button onClick={() => handleGuestChange('children', 'increase')} aria-label="Agregar un niño" className={buttonStyles({ variant: 'secondary', size: 'sm', className: 'w-10 h-10 !p-0 !rounded-full' })}>+</button>
                             </div>
                         </div>
                         <div className="flex justify-between items-center">

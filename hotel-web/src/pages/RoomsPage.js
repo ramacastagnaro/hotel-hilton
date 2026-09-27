@@ -43,7 +43,7 @@ function RoomsPage() {
     let currentRooms = [...rooms];
 
     if (searchData?.guests) {
-      const totalGuests = searchData.guests.adults + searchData.guests.children;
+      const totalGuests = searchData.guests.adults;
       currentRooms = currentRooms.filter(room => room.capacity >= totalGuests);
     }
 
