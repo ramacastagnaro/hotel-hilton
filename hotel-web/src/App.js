@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
@@ -9,7 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
 // Page Components
 import AboutPage from './pages/AboutPage';
-import AccountPage from './pages/AccountPage';
+import AccountDashboardPage from './pages/AccountDashboardPage';
 import BookingPage from './pages/BookingPage';
 import ContactPage from './pages/ContactPage';
 import HomePage from './pages/HomePage';
@@ -19,7 +19,6 @@ import RoomDetailPage from './pages/RoomDetailPage';
 import RoomsPage from './pages/RoomsPage';
 import ServicesPage from './pages/ServicesPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
-import UserProfilePage from './pages/UserProfilePage';
 
 // Admin Pages
 import AdminDashboard from './pages/Admin/AdminDashboard';
@@ -76,8 +75,9 @@ function App() {
                 <Route path="/sobre-nosotros" element={<AboutPage />}/>
                 <Route path="/registrar" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/mi-cuenta" element={<AccountPage />} />
-                <Route path="/perfil" element={<UserProfilePage />} />
+                <Route path="/mi-cuenta" element={<AccountDashboardPage />} />
+                {/* Legacy links (e.g. PaymentSuccessPage) keep working. */}
+                <Route path="/perfil" element={<Navigate to="/mi-cuenta" replace />} />
               </Routes>
             </main>
             
