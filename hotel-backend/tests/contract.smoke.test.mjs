@@ -112,8 +112,14 @@ test('operators service never selects a secret column', () => {
 
 test('admin and operator surfaces are mounted behind the role guard', () => {
   const source = read('../index.js');
-  assert.match(source, /'\/api\/admin',\s*requireAuth\('admin'\)/);
-  assert.match(source, /'\/api\/operator',\s*requireAuth\('operador'\)/);
+  assert.match(
+    source,
+    /'\/api\/admin',\s*requireAuth\(\{\s*roles:\s*\['admin'\],\s*readOnlyRoles:\s*\['demo'\]\s*\}\)/
+  );
+  assert.match(
+    source,
+    /'\/api\/operator',\s*requireAuth\(\{\s*roles:\s*\['operador'\],\s*readOnlyRoles:\s*\['demo'\]\s*\}\)/
+  );
   // The broken plaintext login endpoint stays removed.
   assert.doesNotMatch(source, /operators\/login/);
 });

@@ -4,8 +4,10 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import OperatorLayout from '../../components/Operator/OperatorLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import { getRooms, setRoomStatus } from '../../services/roomsService';
 import { formatPrice } from '../../utils/format';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 // Fix para los iconos de Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -16,6 +18,7 @@ L.Icon.Default.mergeOptions({
 });
 
 function OperatorRooms() {
+    const canMutate = useCanMutate();
     const [rooms, setRooms] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -64,7 +67,7 @@ function OperatorRooms() {
                     Error: {error}
                     <button 
                         onClick={fetchRooms}
-                        className="mt-2 px-4 py-2 bg-red-700 rounded hover:bg-red-800">
+                        className={buttonStyles({ variant: 'destructive', className: 'mt-2' })}>
                         Reintentar
                     </button>
                 </div>
@@ -142,38 +145,22 @@ function OperatorRooms() {
             <div className="flex gap-4 mb-6">
                 <button
                     onClick={() => setFilterStatus('all')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'all'
-                            ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg'
-                            : 'bg-emerald-800 text-gray-300 hover:bg-emerald-700'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'all' ? 'primary' : 'secondary' })}>
                     Todas ({rooms.length})
                 </button>
                 <button
                     onClick={() => setFilterStatus('disponible')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'disponible'
-                            ? 'bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg'
-                            : 'bg-emerald-800 text-gray-300 hover:bg-emerald-700'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'disponible' ? 'primary' : 'secondary' })}>
                     Disponibles ({rooms.filter(r => r.status === 'disponible').length})
                 </button>
                 <button
                     onClick={() => setFilterStatus('ocupada')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'ocupada'
-                            ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg'
-                            : 'bg-emerald-800 text-gray-300 hover:bg-emerald-700'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'ocupada' ? 'primary' : 'secondary' })}>
                     Ocupadas ({rooms.filter(r => r.status === 'ocupada').length})
                 </button>
                 <button
                     onClick={() => setFilterStatus('mantenimiento')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'mantenimiento'
-                            ? 'bg-gradient-to-r from-yellow-600 to-yellow-700 text-white shadow-lg'
-                            : 'bg-emerald-800 text-gray-300 hover:bg-emerald-700'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'mantenimiento' ? 'primary' : 'secondary' })}>
                     Mantenimiento ({rooms.filter(r => r.status === 'mantenimiento').length})
                 </button>
             </div>
@@ -249,13 +236,13 @@ function OperatorRooms() {
                                         <span className={`px-3 py-1 ${getStatusColor(room.status || 'disponible')} text-white text-xs font-bold rounded-full text-center`}>
                                             {room.status || 'disponible'}
                                         </span>
-                                        {room.status !== 'ocupada' && (
+                                        {canMutate && room.status !== 'ocupada' && (
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     toggleRoomStatus(room.room_id);
                                                 }}
-                                                className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-full transition-colors">
+                                                className={buttonStyles({ variant: 'secondary', size: 'sm' })}>
                                                 {room.status === 'disponible' ? 'Cerrar' : 'Abrir'}
                                             </button>
                                         )}
@@ -277,6 +264,7 @@ function OperatorRooms() {
                         </h2>
                         <button
                             onClick={() => setSelectedRoom(null)}
+                            aria-label="Cerrar"
                             className="text-gray-400 hover:text-white transition-colors">
                             <i className="fas fa-times text-xl"></i>
                         </button>

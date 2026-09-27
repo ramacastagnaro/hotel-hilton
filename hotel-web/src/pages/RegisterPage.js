@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase/config'; //configuracion 'auth'
+import { buttonStyles } from '../utils/buttonStyles';
 
 function RegisterPage() {
     const navigate = useNavigate();
@@ -10,9 +11,11 @@ function RegisterPage() {
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(''); //msj de error
+    const [isSaving, setIsSaving] = useState(false); // BTN-4: disable submit while the request is in flight
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
+        if (isSaving) return; // BTN-4: guard against re-entry while saving
         setError(''); //limpiar msj de error
         
         if(password !== confirmPassword){
@@ -24,6 +27,7 @@ function RegisterPage() {
             setError('La contraseña debe tener al menos 6 caracteres.');
         }
 
+        setIsSaving(true);
         try{
             //Llamamos a Firebase para crear el user
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -41,20 +45,22 @@ function RegisterPage() {
             } else {
                 setError('Ocurrió un error durante el registro. Inténtalo de nuevo.');
             }
+        } finally {
+            setIsSaving(false);
         }
     };
 
     return(
-        <div className='min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center p-4 py-12'>
+        <div className='min-h-screen bg-gradient-to-br from-navy-50 via-surface-50 to-gold-50 flex items-center justify-center p-4 py-12'>
             <Helmet>
                 <title>Registro - Hotel Hilton</title>
             </Helmet>
             <div className='w-full max-w-md bg-white/90 backdrop-blur-md p-10 rounded-2xl shadow-2xl border border-white/20 animate-fadeIn'>
                 <div className="text-center mb-8">
-                    <div className="inline-block p-3 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-4 shadow-lg">
-                        <i className="fas fa-user-plus text-white text-3xl"></i>
+                    <div className="inline-block p-3 bg-navy-800 rounded-2xl mb-4 shadow-lg">
+                        <i className="fas fa-user-plus text-gold-400 text-3xl"></i>
                     </div>
-                    <h1 className='text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2'>Crear Cuenta</h1>
+                    <h1 className='text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-navy-800 to-gold-500 mb-2'>Crear Cuenta</h1>
                     <p className="text-gray-600">Únete a nuestra comunidad</p>
                 </div>
 
@@ -114,15 +120,25 @@ function RegisterPage() {
                     <div className="pt-2">
                         <button
                             type="submit"
-                            className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2">
-                            <span>Registrarse</span>
-                            <i className="fas fa-user-check"></i>
+                            disabled={isSaving}
+                            className={buttonStyles({ variant: 'primary', size: 'lg', className: 'w-full' })}>
+                            {isSaving ? (
+                                <>
+                                    <i className="fas fa-spinner fa-spin"></i>
+                                    <span>Guardando...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span>Registrarse</span>
+                                    <i className="fas fa-user-check"></i>
+                                </>
+                            )}
                         </button>
                     </div>
                 </form>
                 <p className="text-center text-sm text-gray-600 mt-8">
                     ¿Ya tienes una cuenta?{' '}
-                    <Link to="/login" className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200">
+                    <Link to="/login" className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-navy-800 to-gold-500 transition-all duration-200">
                         Inicia sesión aquí
                     </Link>
                 </p>

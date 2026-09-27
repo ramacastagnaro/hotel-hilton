@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { auth } from '../firebase/config';
 import { createReservation } from '../services/reservationsService';
+import { buttonStyles } from '../utils/buttonStyles';
 
 function BookingPage(){
     const { currentUser } = useAuth();
@@ -49,6 +50,7 @@ function BookingPage(){
     const [createAccount, setCreateAccount] = useState(false);
     const [password, setPassword] = useState('');
     const [paymentMethod, setPaymentMethod] = useState(''); // 'mercadopago', 'paypal', 'card'
+    const [isSaving, setIsSaving] = useState(false); // BTN-4: disable submit while the request is in flight
 
     //navegacion segura
     useEffect(() => {
@@ -123,6 +125,7 @@ function BookingPage(){
                 firebaseUID
             };
 
+            setIsSaving(true);
             try {
                 // 2. Enviamos la reserva a la API a través del servicio centralizado
                 const newReservation = await createReservation(reservationData);
@@ -141,6 +144,8 @@ function BookingPage(){
             } catch (err) {
                 console.error("Error al enviar la reserva:", err);
                 alert('Ocurrió un error al procesar tu reserva: ' + err.message);
+            } finally {
+                setIsSaving(false);
             }
         }
     };
@@ -151,20 +156,20 @@ function BookingPage(){
     }
 
     return (
-        <div className="container mx-auto p-4 py-12">
+        <div className="container mx-auto p-4 py-8 sm:py-12">
             <Helmet>
                 <title>Confirmar Reserva - Hotel Hilton</title>
             </Helmet>
 
-            <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">¡Último paso! Confirme su reserva ahora</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 sm:mb-8">¡Último paso! Confirmá tu reserva ahora</h1>
 
             <div className="lg:flex lg:gap-8">
                 {/* --- Columna Izquierda: FORMULARIO MULTI-PASO --- */}
-                <div className="lg:w-2/3 bg-white p-8 rounded-lg shadow-lg">
+                <div className="lg:w-2/3 bg-white p-4 sm:p-8 rounded-lg shadow-lg">
                 {/* Datos del Titular*/}
                 {step === 1 && (
                     <section>
-                        <h2 className="text-2xl font-bold mb-6 border-b pb-4"><i className="fas fa-user mr-2"></i> Datos del titular de la reserva</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold mb-6 border-b pb-4"><i className="fas fa-user mr-2"></i> Datos del titular de la reserva</h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
@@ -215,7 +220,7 @@ function BookingPage(){
                                 </select>
                             </div>
                             <div className="text-right pt-4">
-                                <button type="submit" className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700">
+                                <button type="submit" className={buttonStyles({ variant: 'primary' })}>
                                     Siguiente: Datos de Contacto →
                                 </button>
                             </div>
@@ -225,7 +230,7 @@ function BookingPage(){
                 {/* Datos de Contacto*/}
                 {step === 2 &&(
                     <section>
-                        <h2 className="text-2xl font-bold mb-6 border-b pb-4"><i className="fas fa-phone mr-2"></i> Datos de contacto</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold mb-6 border-b pb-4"><i className="fas fa-phone mr-2"></i> Datos de contacto</h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             
                             <div>
@@ -283,10 +288,10 @@ function BookingPage(){
 
                             {/* Botones de Navegacion */}
                             <div className="flex justify-between pt-4">
-                                <button type="button" onClick={() => setStep(1)} className="text-gray-600 hover:text-gray-900 font-medium py-2 px-4 rounded-lg">
+                                <button type="button" onClick={() => setStep(1)} className={buttonStyles({ variant: 'ghost' })}>
                                     ← Volver
                                 </button>
-                                <button type="submit" className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700">
+                                <button type="submit" className={buttonStyles({ variant: 'primary' })}>
                                     Siguiente: Información de Pago →
                                 </button>
                             </div>
@@ -297,7 +302,7 @@ function BookingPage(){
                 {/* Info de pago - Paso 3 */}
                 {step === 3 && (
                     <section>
-                        <h2 className="text-2xl font-bold mb-6 border-b pb-4">
+                        <h2 className="text-xl sm:text-2xl font-bold mb-6 border-b pb-4">
                             <i className="fas fa-credit-card mr-2"></i> Información de pago
                         </h2>
                         
@@ -346,7 +351,7 @@ function BookingPage(){
                                 </button>
 
                                 <div className="flex justify-between pt-6 border-t mt-8">
-                                    <button type="button" onClick={() => setStep(2)} className="text-gray-600 hover:text-gray-900 font-medium py-2 px-4 rounded-lg">
+                                    <button type="button" onClick={() => setStep(2)} className={buttonStyles({ variant: 'ghost' })}>
                                         ← Volver
                                     </button>
                                 </div>
@@ -410,11 +415,17 @@ function BookingPage(){
 
                                 {/* Botones de Navegación */}
                                 <div className="flex justify-between pt-6 border-t mt-8">
-                                    <button type="button" onClick={() => setPaymentMethod('')} className="text-gray-600 hover:text-gray-900 font-medium py-2 px-4 rounded-lg">
+                                    <button type="button" onClick={() => setPaymentMethod('')} className={buttonStyles({ variant: 'ghost' })}>
                                         ← Cambiar método
                                     </button>
-                                    <button type="submit" className="bg-green-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-700 text-lg">
-                                        Confirmar y Pagar
+                                    <button type="submit" className={buttonStyles({ variant: 'confirm', size: 'lg' })} disabled={isSaving}>
+                                        {isSaving ? (
+                                            <>
+                                                <i className="fas fa-spinner fa-spin"></i> Procesando...
+                                            </>
+                                        ) : (
+                                            'Confirmar y Pagar'
+                                        )}
                                     </button>
                                 </div>
                             </form>
@@ -425,7 +436,7 @@ function BookingPage(){
                 
             {/* --- Columna Derecha: Resumen (Sidebar) --- */}
             <div className="lg:w-1/3 mt-8 lg:mt-0">
-                <div className="bg-white p-6 rounded-lg shadow-lg sticky top-24">
+                <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg lg:sticky lg:top-24">
                     <img src={room.images[0]} alt={room.name} className="w-full h-40 object-cover rounded-md mb-4" />
                     <h3 className="text-xl font-bold">{room.name}</h3>
                     <p className="text-sm text-gray-500 mb-4">{tariff.name}</p>
@@ -445,7 +456,7 @@ function BookingPage(){
                         </div>
                         <div className="flex justify-between mt-4 pt-4 border-t">
                             <span className="text-lg font-bold">Total:</span>
-                            <span className="text-2xl font-bold text-blue-600">${totalPrice.toLocaleString('es-AR')}</span>
+                            <span className="text-xl sm:text-2xl font-bold text-navy-800">${totalPrice.toLocaleString('es-AR')}</span>
                         </div>
                     </div>
                 </div>

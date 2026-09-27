@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import { getAdminReservations, updateStatus } from '../../services/reservationsService';
 import { formatDate, formatPrice, statusColor } from '../../utils/format';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 function AdminReservations() {
+    const canMutate = useCanMutate();
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -120,38 +123,22 @@ function AdminReservations() {
             <div className="flex gap-4 mb-8">
                 <button
                     onClick={() => setFilterStatus('all')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'all'
-                            ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/50'
-                            : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'all' ? 'primary' : 'secondary' })}>
                     Todas ({stats.total})
                 </button>
                 <button
                     onClick={() => setFilterStatus('confirmada')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'confirmada'
-                            ? 'bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'confirmada' ? 'primary' : 'secondary' })}>
                     Confirmadas ({stats.confirmadas})
                 </button>
                 <button
                     onClick={() => setFilterStatus('pendiente')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'pendiente'
-                            ? 'bg-gradient-to-r from-yellow-600 to-yellow-700 text-white shadow-lg'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'pendiente' ? 'primary' : 'secondary' })}>
                     Pendientes ({stats.pendientes})
                 </button>
                 <button
                     onClick={() => setFilterStatus('cancelada')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'cancelada'
-                            ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'cancelada' ? 'primary' : 'secondary' })}>
                     Canceladas ({stats.canceladas})
                 </button>
             </div>
@@ -161,7 +148,7 @@ function AdminReservations() {
                 {filteredReservations.map((reservation) => (
                     <div
                         key={reservation.reservation_id}
-                        className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl overflow-hidden shadow-xl border border-cyan-700/30 hover:border-cyan-500/50 transition-all duration-300">
+                        className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl overflow-hidden shadow-xl border border-navy-500/30 hover:border-navy-400/50 transition-all duration-300">
                         <div className="flex items-center gap-6 p-6">
                             {/* Imagen de la habitación */}
                             <div className="w-32 h-32 rounded-xl overflow-hidden flex-shrink-0">
@@ -190,7 +177,7 @@ function AdminReservations() {
                                     <div>
                                         <p className="text-gray-500">Check-in - Check-out</p>
                                         <p className="text-white font-semibold">
-                                            <i className="fas fa-calendar text-blue-400 mr-1"></i>
+                                            <i className="fas fa-calendar text-gold-400 mr-1"></i>
                                             {formatDate(reservation.start_date)} - {formatDate(reservation.end_date)}
                                         </p>
                                     </div>
@@ -211,14 +198,16 @@ function AdminReservations() {
                             </div>
 
                             {/* Botón de cambiar estado */}
-                            <div className="flex-shrink-0">
-                                <button
-                                    onClick={() => handleStatusChange(reservation.reservation_id, 'confirmada')}
-                                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2">
-                                    <i className="fas fa-check"></i>
-                                    <span>Confirmar</span>
-                                </button>
-                            </div>
+                            {canMutate && (
+                                <div className="flex-shrink-0">
+                                    <button
+                                        onClick={() => handleStatusChange(reservation.reservation_id, 'confirmada')}
+                                        className={buttonStyles({ variant: 'confirm' })}>
+                                        <i className="fas fa-check"></i>
+                                        <span>Confirmar</span>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}

@@ -26,3 +26,18 @@ export const ALLOWED_ORIGINS = (
 // Path to the Firebase Admin service account JSON.
 export const FIREBASE_ADMIN_KEY_PATH =
   process.env.FIREBASE_ADMIN_KEY_PATH || './firebase-admin-key.json';
+
+// Mercado Pago Checkout Pro credentials. `MP_ACCESS_TOKEN` is a SECRET
+// (a production `APP_USR-...` token): it is provided by the host environment
+// (e.g. Render) and is never committed to the repository.
+export const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
+
+// Public frontend origin used to build the Mercado Pago `back_urls`.
+export const FRONTEND_URL = (
+  process.env.FRONTEND_URL || 'http://localhost:3000'
+).replace(/\/+$/, '');
+
+// Public API origin used to build the Mercado Pago `notification_url`
+// (webhook). Optional: the payments controller falls back to the incoming
+// request origin when it is unset (fine for local development).
+export const BACKEND_URL = (process.env.BACKEND_URL || '').replace(/\/+$/, '');

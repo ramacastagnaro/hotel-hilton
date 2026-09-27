@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import {
     createRoom,
     deleteRoom,
@@ -8,13 +9,16 @@ import {
     updateRoom,
 } from '../../services/roomsService';
 import { formatPrice } from '../../utils/format';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 function AdminRooms() {
+    const canMutate = useCanMutate();
     const [rooms, setRooms] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [editingRoom, setEditingRoom] = useState(null);
+    const [isSaving, setIsSaving] = useState(false); // BTN-4: disable submit while the request is in flight
     const [formData, setFormData] = useState({
         name: '',
         category: 'Estándar',
@@ -85,7 +89,9 @@ function AdminRooms() {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        
+        if (isSaving) return; // BTN-4: guard against re-entry while saving
+
+        setIsSaving(true);
         try {
             // Preservar los datos existentes (JSONB) al editar: no se deben
             // destruir services/tariffs/images ni enviar tariffs como objeto.
@@ -113,6 +119,8 @@ function AdminRooms() {
         } catch (err) {
             console.error('Error al guardar:', err);
             alert('Error al guardar la habitación');
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -136,7 +144,7 @@ function AdminRooms() {
                     <p><strong>Error:</strong> {error}</p>
                     <button 
                         onClick={fetchRooms}
-                        className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                        className={buttonStyles({ variant: 'destructive', className: 'mt-2' })}>
                         Reintentar
                     </button>
                 </div>
@@ -156,12 +164,14 @@ function AdminRooms() {
                     <i className="fas fa-bed text-white text-3xl"></i>
                     <h1 className="text-3xl font-bold text-white">Gestión de Habitaciones ({rooms.length})</h1>
                 </div>
-                <button
-                    onClick={handleNewRoom}
-                    className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2">
-                    <i className="fas fa-plus"></i>
-                    <span>Nueva Habitación</span>
-                </button>
+                {canMutate && (
+                    <button
+                        onClick={handleNewRoom}
+                        className={buttonStyles({ variant: 'primary' })}>
+                        <i className="fas fa-plus"></i>
+                        <span>Nueva Habitación</span>
+                    </button>
+                )}
             </div>
 
             {/* Grid de habitaciones */}
@@ -177,7 +187,7 @@ function AdminRooms() {
                                 alt={room.name}
                                 className="w-full h-full object-cover"
                             />
-                            <div className="absolute top-4 right-4 px-3 py-1 bg-purple-600 text-white font-bold rounded-full text-sm">
+                            <div className="absolute top-4 right-4 px-3 py-1 bg-navy-700 text-white font-bold rounded-full text-sm">
                                 {room.category}
                             </div>
                         </div>
@@ -198,20 +208,22 @@ function AdminRooms() {
                             </div>
 
                             {/* Botones de acción */}
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => handleEdit(room)}
-                                    className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center justify-center gap-2">
-                                    <i className="fas fa-edit"></i>
-                                    <span>Editar</span>
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(room.room_id)}
-                                    className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center justify-center gap-2">
-                                    <i className="fas fa-trash"></i>
-                                    <span>Eliminar</span>
-                                </button>
-                            </div>
+                            {canMutate && (
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => handleEdit(room)}
+                                        className={buttonStyles({ variant: 'secondary', className: 'flex-1' })}>
+                                        <i className="fas fa-edit"></i>
+                                        <span>Editar</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(room.room_id)}
+                                        className={buttonStyles({ variant: 'destructive', className: 'flex-1' })}>
+                                        <i className="fas fa-trash"></i>
+                                        <span>Eliminar</span>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -309,13 +321,20 @@ function AdminRooms() {
                                 <button
                                     type="button"
                                     onClick={() => setShowModal(false)}
-                                    className="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all">
+                                    className={buttonStyles({ variant: 'secondary', className: 'flex-1' })}>
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold rounded-xl transition-all shadow-lg">
-                                    {editingRoom ? 'Guardar Cambios' : 'Crear Habitación'}
+                                    disabled={isSaving}
+                                    className={buttonStyles({ variant: 'primary', className: 'flex-1' })}>
+                                    {isSaving ? (
+                                        <>
+                                            <i className="fas fa-spinner fa-spin"></i> Guardando...
+                                        </>
+                                    ) : (
+                                        editingRoom ? 'Guardar Cambios' : 'Crear Habitación'
+                                    )}
                                 </button>
                             </div>
                         </form>

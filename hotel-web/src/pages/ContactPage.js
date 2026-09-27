@@ -2,6 +2,7 @@ import emailjs from '@emailjs/browser';
 import { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import Map from '../components/Map/Map';
+import { buttonStyles } from '../utils/buttonStyles';
 
 function ContactPage() {
     const [formData, setFormData] = useState({
@@ -114,7 +115,7 @@ function ContactPage() {
             <div className="text-center">
                 <button
                 type="submit"
-                className={`bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300 ${isSending ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={buttonStyles({ variant: 'primary', size: 'lg' })}
                 disabled={isSending}
                 >
                 {isSending ? 'Enviando...' : 'Enviar Mensaje'}
@@ -135,7 +136,7 @@ function ContactPage() {
                         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
                             <button
                                 onClick={() => setShowFullMap(true)}
-                                className="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center gap-2">
+                                className={buttonStyles({ variant: 'primary', size: 'lg' })}>
                                 📍 Ver ubicación en el mapa
                             </button>
                         </div>

@@ -13,6 +13,12 @@ ALTER TABLE reservations
 ALTER TABLE reservations
   ADD COLUMN IF NOT EXISTS payment_method VARCHAR(100);
 
+-- 1b. Mercado Pago Checkout Pro preference id (WU: payments). The same
+--     idempotent pattern: existing rows keep a NULL preference until they are
+--     checked out again.
+ALTER TABLE reservations
+  ADD COLUMN IF NOT EXISTS mp_preference_id VARCHAR(100);
+
 -- 2. Backfill legacy rows into the canonical default.
 UPDATE reservations
    SET payment_status = 'pendiente'

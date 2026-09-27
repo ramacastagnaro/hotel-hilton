@@ -1,19 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import {
     createOperator,
     deleteOperator,
     getOperators,
     updateOperator,
 } from '../../services/operatorsService';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 function AdminUsers() {
+    const canMutate = useCanMutate();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [editingUser, setEditingUser] = useState(null);
+    const [isSaving, setIsSaving] = useState(false); // BTN-4: disable submit while the request is in flight
     const [formData, setFormData] = useState({
         full_name: '',
         email: '',
@@ -60,7 +64,7 @@ function AdminUsers() {
                     <p><strong>Error:</strong> {error}</p>
                     <button 
                         onClick={fetchUsers}
-                        className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                        className={buttonStyles({ variant: 'destructive', className: 'mt-2' })}>
                         Reintentar
                     </button>
                 </div>
@@ -73,7 +77,7 @@ function AdminUsers() {
             case 'Admin':
                 return 'bg-red-600 text-white';
             case 'Operador':
-                return 'bg-purple-600 text-white';
+                return 'bg-navy-600 text-white';
             default:
                 return 'bg-blue-600 text-white';
         }
@@ -86,7 +90,7 @@ function AdminUsers() {
     const getAvatarColor = (id) => {
         const colors = [
             'from-blue-500 to-blue-700',
-            'from-purple-500 to-purple-700',
+            'from-navy-500 to-navy-700',
             'from-red-500 to-red-700',
             'from-green-500 to-green-700',
             'from-yellow-500 to-yellow-700'
@@ -118,13 +122,15 @@ function AdminUsers() {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+        if (isSaving) return; // BTN-4: guard against re-entry while saving
+
         // Validar contraseña para nuevos usuarios
         if (!editingUser && formData.password.length < 6) {
             alert('❌ La contraseña debe tener al menos 6 caracteres');
             return;
         }
         
+        setIsSaving(true);
         try {
             if (editingUser) {
                 // Actualizar usuario existente
@@ -144,6 +150,8 @@ function AdminUsers() {
         } catch (err) {
             console.error('Error al guardar usuario:', err);
             alert('Error al guardar usuario: ' + err.message);
+        } finally {
+            setIsSaving(false);
         }
     };
     
@@ -174,12 +182,14 @@ function AdminUsers() {
                     <i className="fas fa-users text-white text-3xl"></i>
                     <h1 className="text-3xl font-bold text-white">Gestión de Usuarios ({users.length})</h1>
                 </div>
-                <button
-                    onClick={handleNewUser}
-                    className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2">
-                    <i className="fas fa-plus"></i>
-                    <span>Nuevo Usuario</span>
-                </button>
+                {canMutate && (
+                    <button
+                        onClick={handleNewUser}
+                        className={buttonStyles({ variant: 'primary' })}>
+                        <i className="fas fa-plus"></i>
+                        <span>Nuevo Usuario</span>
+                    </button>
+                )}
             </div>
 
             {/* Lista de usuarios */}
@@ -224,20 +234,22 @@ function AdminUsers() {
                                 </div>
 
                                 {/* Botones de acción */}
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => handleEdit(user)}
-                                        className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2">
-                                        <i className="fas fa-edit"></i>
-                                        <span>Editar</span>
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(user.operator_id)}
-                                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2">
-                                        <i className="fas fa-trash"></i>
-                                        <span>Eliminar</span>
-                                    </button>
-                                </div>
+                                {canMutate && (
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => handleEdit(user)}
+                                            className={buttonStyles({ variant: 'secondary' })}>
+                                            <i className="fas fa-edit"></i>
+                                            <span>Editar</span>
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(user.operator_id)}
+                                            className={buttonStyles({ variant: 'destructive' })}>
+                                            <i className="fas fa-trash"></i>
+                                            <span>Eliminar</span>
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -307,13 +319,20 @@ function AdminUsers() {
                                 <button
                                     type="button"
                                     onClick={() => setShowModal(false)}
-                                    className="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all">
+                                    className={buttonStyles({ variant: 'secondary', className: 'flex-1' })}>
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold rounded-xl transition-all shadow-lg">
-                                    {editingUser ? 'Guardar' : 'Crear'}
+                                    disabled={isSaving}
+                                    className={buttonStyles({ variant: 'primary', className: 'flex-1' })}>
+                                    {isSaving ? (
+                                        <>
+                                            <i className="fas fa-spinner fa-spin"></i> Guardando...
+                                        </>
+                                    ) : (
+                                        editingUser ? 'Guardar' : 'Crear'
+                                    )}
                                 </button>
                             </div>
                         </form>

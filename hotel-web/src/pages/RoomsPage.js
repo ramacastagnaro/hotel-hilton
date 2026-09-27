@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import RoomCard from '../components/RoomCard/RoomCard';
 import { getRooms } from '../services/roomsService';
+import { buttonStyles } from '../utils/buttonStyles';
 
 function RoomsPage() {
   const location = useLocation();
@@ -42,7 +43,7 @@ function RoomsPage() {
     let currentRooms = [...rooms];
 
     if (searchData?.guests) {
-      const totalGuests = searchData.guests.adults + searchData.guests.children;
+      const totalGuests = searchData.guests.adults;
       currentRooms = currentRooms.filter(room => room.capacity >= totalGuests);
     }
 
@@ -93,7 +94,7 @@ function RoomsPage() {
             <p className="text-gray-600">{error}</p>
             <button 
               onClick={() => window.location.reload()}
-              className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+              className={buttonStyles({ variant: 'primary', className: 'mt-4' })}>
               Reintentar
             </button>
           </div>
@@ -109,8 +110,8 @@ function RoomsPage() {
       </Helmet>
 
       {/* --- INICIO CORRECCIÓN: Se añade sección de filtros --- */}
-      <div className="mb-8 p-6 bg-gray-100 rounded-lg shadow sticky top-[75px] z-40">
-          <h2 className="text-xl font-bold mb-4 text-gray-800">Filtrar Resultados</h2>
+      <div className="mb-8 p-4 sm:p-6 bg-gray-100 rounded-lg shadow sticky top-[75px] z-30">
+          <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-800">Filtrar Resultados</h2>
           <div className="flex flex-col md:flex-row gap-4">
                {/* Input de búsqueda */}
               <div className="flex-grow">
@@ -121,7 +122,7 @@ function RoomsPage() {
                       placeholder="Buscar por nombre..."
                       value={searchTerm}
                       onChange={handleSearchChange}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-gold-400 focus:border-gold-400 shadow-sm"
                   />
               </div>
                {/* Botones de categoría */}
@@ -129,26 +130,26 @@ function RoomsPage() {
                   <span className='text-sm font-medium text-gray-600 mr-2'>Categoría:</span>
                   {categories.map(category => (
                       <button key={category} onClick={() => handleCategoryChange(category)}
-                          className={`px-4 py-2 rounded-md text-sm font-medium transition duration-200 shadow-sm ${
-                              categoryFilter === category
-                              ? 'bg-blue-600 text-white ring-2 ring-blue-300'
-                              : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-300'
-                          }`}>
+                          className={buttonStyles({
+                              variant: categoryFilter === category ? 'primary' : 'secondary',
+                              size: 'sm',
+                              className: 'shadow-sm',
+                          })}>
                           {category === 'all' ? 'Todas' : category}
                       </button>
                   ))}
               </div>
           </div>
       </div>
-      <div className="text-center mb-12 mt-8">
-        <h1 className="text-4xl font-bold text-gray-800">Resultados de Búsqueda</h1>
+      <div className="text-center mb-10 mt-6 sm:mb-12 sm:mt-8">
+        <h1 className="text-2xl sm:text-4xl font-bold text-gray-800">Resultados de Búsqueda</h1>
         <p className="text-gray-600 mt-2">
           {filteredRooms.length} {filteredRooms.length === 1 ? 'habitación encontrada' : 'habitaciones encontradas'} para tu selección.
         </p>
       </div>
       
       {filteredRooms.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {filteredRooms.map(room => (
             <RoomCard key={room.room_id} room={room} />
           ))}

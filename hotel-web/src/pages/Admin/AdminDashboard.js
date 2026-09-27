@@ -81,15 +81,15 @@ function AdminDashboard() {
             {/* Cards de estadísticas principales */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {/* Total Usuarios */}
-                <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 shadow-xl transform hover:scale-105 transition-all duration-300">
+                <div className="bg-gradient-to-br from-navy-700 to-navy-900 rounded-2xl p-6 shadow-xl transform hover:scale-105 transition-all duration-300">
                     <div className="flex items-center justify-between mb-4">
                         <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
                             <i className="fas fa-users text-white text-2xl"></i>
                         </div>
-                        <span className="text-blue-200 text-sm font-semibold">Total Usuarios</span>
+                        <span className="text-navy-200 text-sm font-semibold">Total Usuarios</span>
                     </div>
                     <h3 className="text-4xl font-bold text-white mb-2">{stats.totalUsers}</h3>
-                    <p className="text-blue-200 text-sm">Usuarios registrados</p>
+                    <p className="text-navy-200 text-sm">Usuarios registrados</p>
                 </div>
 
                 {/* Total Reservas */}
@@ -117,20 +117,20 @@ function AdminDashboard() {
                 </div>
 
                 {/* Habitaciones */}
-                <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-2xl p-6 shadow-xl transform hover:scale-105 transition-all duration-300">
+                <div className="bg-gradient-to-br from-gold-500 to-gold-700 rounded-2xl p-6 shadow-xl transform hover:scale-105 transition-all duration-300">
                     <div className="flex items-center justify-between mb-4">
                         <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                            <i className="fas fa-bed text-white text-2xl"></i>
+                            <i className="fas fa-bed text-navy-950 text-2xl"></i>
                         </div>
-                        <span className="text-purple-200 text-sm font-semibold">Habitaciones</span>
+                        <span className="text-navy-900 text-sm font-semibold">Habitaciones</span>
                     </div>
-                    <h3 className="text-4xl font-bold text-white mb-2">{stats.totalRooms}</h3>
-                    <p className="text-purple-200 text-sm">Tipos disponibles</p>
+                    <h3 className="text-4xl font-bold text-navy-950 mb-2">{stats.totalRooms}</h3>
+                    <p className="text-navy-900 text-sm">Tipos disponibles</p>
                 </div>
             </div>
 
             {/* Estado de Reservas */}
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 shadow-xl mb-8 border border-cyan-700/30">
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 shadow-xl mb-8 border border-navy-500/30">
                 <div className="flex items-center gap-3 mb-6">
                     <i className="fas fa-chart-pie text-white text-2xl"></i>
                     <h2 className="text-2xl font-bold text-white">Estado de Reservas</h2>
@@ -155,10 +155,10 @@ function AdminDashboard() {
 
                     {/* Completadas */}
                     <div className="text-center">
-                        <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-cyan-500 to-blue-700 rounded-full flex items-center justify-center shadow-lg">
+                        <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-navy-600 to-navy-800 rounded-full flex items-center justify-center shadow-lg">
                             <span className="text-5xl font-bold text-white">{reservationsByStatus.completada || 0}</span>
                         </div>
-                        <p className="text-cyan-400 font-bold text-lg">Completadas</p>
+                        <p className="text-gold-400 font-bold text-lg">Completadas</p>
                     </div>
 
                     {/* Canceladas */}

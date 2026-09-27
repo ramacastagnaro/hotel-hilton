@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import OperatorLayout from '../../components/Operator/OperatorLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import { getReservations, updatePayment } from '../../services/reservationsService';
 import { formatPrice } from '../../utils/format';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 function OperatorPayments() {
+    const canMutate = useCanMutate();
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -59,7 +62,7 @@ function OperatorPayments() {
                     Error: {error}
                     <button 
                         onClick={fetchPayments}
-                        className="mt-2 px-4 py-2 bg-red-700 rounded hover:bg-red-800">
+                        className={buttonStyles({ variant: 'destructive', className: 'mt-2' })}>
                         Reintentar
                     </button>
                 </div>
@@ -204,10 +207,10 @@ function OperatorPayments() {
                                         <span className={`px-4 py-2 ${getStatusColor(payment.status)} text-white text-sm font-bold rounded-lg text-center`}>
                                             {payment.status}
                                         </span>
-                                        {payment.status === 'pendiente' && (
+                                        {canMutate && payment.status === 'pendiente' && (
                                             <button
                                                 onClick={() => handleProcessPayment(payment)}
-                                                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2">
+                                                className={buttonStyles({ variant: 'confirm' })}>
                                                 <i className="fas fa-credit-card"></i>
                                                 <span>Procesar</span>
                                             </button>
@@ -286,7 +289,7 @@ function OperatorPayments() {
                                             ? 'border-emerald-500 bg-emerald-600/30'
                                             : 'border-emerald-700/30 hover:border-emerald-600/50'
                                     }`}>
-                                    <i className="fas fa-credit-card text-purple-400 text-xl"></i>
+                                    <i className="fas fa-credit-card text-gold-400 text-xl"></i>
                                     <span className="text-white font-semibold">Tarjeta de Débito</span>
                                 </button>
 
@@ -311,12 +314,12 @@ function OperatorPayments() {
                                     setPaymentMethod('');
                                     setSelectedPayment(null);
                                 }}
-                                className="flex-1 px-4 py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all">
+                                className={buttonStyles({ variant: 'secondary', className: 'flex-1' })}>
                                 Cancelar
                             </button>
                             <button
                                 onClick={confirmPayment}
-                                className="flex-1 px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl transition-all shadow-lg">
+                                className={buttonStyles({ variant: 'confirm', className: 'flex-1' })}>
                                 Confirmar Pago
                             </button>
                         </div>

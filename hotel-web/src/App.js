@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
@@ -9,7 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
 // Page Components
 import AboutPage from './pages/AboutPage';
-import AccountPage from './pages/AccountPage';
+import AccountDashboardPage from './pages/AccountDashboardPage';
 import BookingPage from './pages/BookingPage';
 import ContactPage from './pages/ContactPage';
 import HomePage from './pages/HomePage';
@@ -19,7 +19,6 @@ import RoomDetailPage from './pages/RoomDetailPage';
 import RoomsPage from './pages/RoomsPage';
 import ServicesPage from './pages/ServicesPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
-import UserProfilePage from './pages/UserProfilePage';
 
 // Admin Pages
 import AdminDashboard from './pages/Admin/AdminDashboard';
@@ -40,18 +39,19 @@ function App() {
     <Router>
       <Routes>
         {/* Rutas del Panel de Administración (sin Header/Footer, protegidas) */}
-        <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/admin/habitaciones" element={<ProtectedRoute><AdminRooms /></ProtectedRoute>} />
-        <Route path="/admin/usuarios" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
-        <Route path="/admin/reservas" element={<ProtectedRoute><AdminReservations /></ProtectedRoute>} />
-        <Route path="/admin/estadisticas" element={<ProtectedRoute><AdminStats /></ProtectedRoute>} />
-        <Route path="/admin/logs" element={<ProtectedRoute><AdminLogs /></ProtectedRoute>} />
+        {/* El rol demo accede en modo solo lectura (mismo allow-list que /admin). */}
+        <Route path="/admin" element={<ProtectedRoute allow={['admin', 'demo']}><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/admin/habitaciones" element={<ProtectedRoute allow={['admin', 'demo']}><AdminRooms /></ProtectedRoute>} />
+        <Route path="/admin/usuarios" element={<ProtectedRoute allow={['admin', 'demo']}><AdminUsers /></ProtectedRoute>} />
+        <Route path="/admin/reservas" element={<ProtectedRoute allow={['admin', 'demo']}><AdminReservations /></ProtectedRoute>} />
+        <Route path="/admin/estadisticas" element={<ProtectedRoute allow={['admin', 'demo']}><AdminStats /></ProtectedRoute>} />
+        <Route path="/admin/logs" element={<ProtectedRoute allow={['admin', 'demo']}><AdminLogs /></ProtectedRoute>} />
 
         {/* Rutas del Panel de Operador (sin Header/Footer, protegidas) */}
-        <Route path="/operador" element={<ProtectedRoute><OperatorDashboard /></ProtectedRoute>} />
-        <Route path="/operador/habitaciones" element={<ProtectedRoute><OperatorRooms /></ProtectedRoute>} />
-        <Route path="/operador/reservas" element={<ProtectedRoute><OperatorReservations /></ProtectedRoute>} />
-        <Route path="/operador/pagos" element={<ProtectedRoute><OperatorPayments /></ProtectedRoute>} />
+        <Route path="/operador" element={<ProtectedRoute allow={['operador', 'demo']}><OperatorDashboard /></ProtectedRoute>} />
+        <Route path="/operador/habitaciones" element={<ProtectedRoute allow={['operador', 'demo']}><OperatorRooms /></ProtectedRoute>} />
+        <Route path="/operador/reservas" element={<ProtectedRoute allow={['operador', 'demo']}><OperatorReservations /></ProtectedRoute>} />
+        <Route path="/operador/pagos" element={<ProtectedRoute allow={['operador', 'demo']}><OperatorPayments /></ProtectedRoute>} />
         
         {/* Rutas públicas (con Header/Footer) */}
         <Route path="/*" element={
@@ -75,8 +75,9 @@ function App() {
                 <Route path="/sobre-nosotros" element={<AboutPage />}/>
                 <Route path="/registrar" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/mi-cuenta" element={<AccountPage />} />
-                <Route path="/perfil" element={<UserProfilePage />} />
+                <Route path="/mi-cuenta" element={<AccountDashboardPage />} />
+                {/* Legacy links (e.g. PaymentSuccessPage) keep working. */}
+                <Route path="/perfil" element={<Navigate to="/mi-cuenta" replace />} />
               </Routes>
             </main>
             

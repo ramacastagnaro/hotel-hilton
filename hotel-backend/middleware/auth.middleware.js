@@ -8,11 +8,29 @@ import { extractBearerToken, verifyIdToken } from '../lib/firebaseAdmin.js';
 import { findOperatorByEmail } from '../services/operators.service.js';
 
 /**
- * @param {string} [role] - When set, the resolved operator role must match.
+ * Role-aware auth guard.
+ *
+ * @param {object} [options]
+ * @param {string[]} [options.roles] - Roles allowed full access.
+ * @param {string[]} [options.readOnlyRoles] - Roles allowed to read only
+ *   (`GET`/`HEAD`); any other method is rejected with 403.
+ * @param {object} [deps] - Test seam. Overrides the auth collaborators so unit
+ *   tests can drive the guard without a live Firebase/Supabase. Defaults to the
+ *   real implementations in production.
  */
-export function requireAuth(role) {
+export function requireAuth(
+  { roles = [], readOnlyRoles = [] } = {},
+  deps = {}
+) {
+  const {
+    verify = verifyIdToken,
+    findOperator = findOperatorByEmail,
+    enforce = REQUIRE_AUTH,
+  } = deps;
+  const allowed = [...roles, ...readOnlyRoles];
+
   return async (req, res, next) => {
-    if (!REQUIRE_AUTH) {
+    if (!enforce) {
       console.warn(
         '[auth] REQUIRE_AUTH desactivado: se omite la verificación de token'
       );
@@ -28,7 +46,7 @@ export function requireAuth(role) {
 
     let decoded;
     try {
-      decoded = await verifyIdToken(token);
+      decoded = await verify(token);
     } catch (err) {
       if (err.status === 503) {
         return res.status(503).json({ error: err.message });
@@ -38,10 +56,10 @@ export function requireAuth(role) {
 
     req.user = { uid: decoded.uid, email: decoded.email };
 
-    if (role) {
+    if (allowed.length) {
       let operator;
       try {
-        operator = await findOperatorByEmail(decoded.email);
+        operator = await findOperator(decoded.email);
       } catch (err) {
         return next(err);
       }
@@ -52,8 +70,17 @@ export function requireAuth(role) {
 
       req.role = operator.role;
 
-      if (operator.role !== role) {
+      if (!allowed.includes(operator.role)) {
         return res.status(403).json({ error: 'Permisos insuficientes' });
+      }
+
+      // Read-only roles (demo) may only observe: reject any state-changing
+      // method even though the role itself is allowed to reach the surface.
+      if (
+        readOnlyRoles.includes(operator.role) &&
+        !['GET', 'HEAD'].includes(req.method)
+      ) {
+        return res.status(403).json({ error: 'Rol de solo lectura' });
       }
     }
 

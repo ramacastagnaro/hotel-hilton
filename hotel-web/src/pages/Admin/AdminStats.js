@@ -17,6 +17,7 @@ import AdminLayout from '../../components/Admin/AdminLayout';
 import { CHART_COLORS } from '../../config/charts';
 import { getAdminCharts } from '../../services/statsService';
 import { formatPrice } from '../../utils/format';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 // Registrar componentes de Chart.js
 ChartJS.register(
@@ -88,7 +89,7 @@ function AdminStats() {
                     <p><strong>Error:</strong> {error}</p>
                     <button 
                         onClick={fetchChartData}
-                        className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                        className={buttonStyles({ variant: 'destructive', className: 'mt-2' })}>
                         Reintentar
                     </button>
                 </div>
@@ -243,7 +244,7 @@ function AdminStats() {
             {/* Gráficos principales */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {/* Ingresos Mensuales */}
-                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-xl border border-cyan-700/30">
+                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-xl border border-navy-500/30">
                     <div className="flex items-center gap-3 mb-4">
                         <i className="fas fa-dollar-sign text-green-400 text-xl"></i>
                         <h2 className="text-xl font-bold text-white">Ingresos Mensuales</h2>
@@ -254,9 +255,9 @@ function AdminStats() {
                 </div>
 
                 {/* Reservas por Mes */}
-                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-xl border border-cyan-700/30">
+                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-xl border border-navy-500/30">
                     <div className="flex items-center gap-3 mb-4">
-                        <i className="fas fa-calendar-check text-blue-400 text-xl"></i>
+                        <i className="fas fa-calendar-check text-gold-400 text-xl"></i>
                         <h2 className="text-xl font-bold text-white">Reservas por Mes</h2>
                     </div>
                     <div className="h-64">
@@ -268,9 +269,9 @@ function AdminStats() {
             {/* Segunda fila de gráficos */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {/* Reservas por Estado */}
-                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-xl border border-cyan-700/30">
+                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-xl border border-navy-500/30">
                     <div className="flex items-center gap-3 mb-4">
-                        <i className="fas fa-chart-pie text-purple-400 text-xl"></i>
+                        <i className="fas fa-chart-pie text-gold-400 text-xl"></i>
                         <h2 className="text-xl font-bold text-white">Reservas por Estado</h2>
                     </div>
                     <div className="h-64">
@@ -279,7 +280,7 @@ function AdminStats() {
                 </div>
 
                 {/* Habitaciones Más Reservadas */}
-                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-xl border border-cyan-700/30">
+                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-xl border border-navy-500/30">
                     <div className="flex items-center gap-3 mb-4">
                         <i className="fas fa-bed text-yellow-400 text-xl"></i>
                         <h2 className="text-xl font-bold text-white">Habitaciones Más Reservadas</h2>
@@ -292,11 +293,11 @@ function AdminStats() {
 
             {/* Cards de estadísticas rápidas */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 shadow-xl">
+                <div className="bg-gradient-to-br from-navy-700 to-navy-900 rounded-2xl p-6 shadow-xl">
                     <div className="flex items-center gap-3 mb-2">
                         <i className="fas fa-users text-white text-2xl"></i>
                     </div>
-                    <p className="text-blue-200 text-sm">Total Usuarios</p>
+                    <p className="text-navy-200 text-sm">Total Usuarios</p>
                     <h3 className="text-4xl font-bold text-white">{chartData.totalUsers}</h3>
                 </div>
 
@@ -308,12 +309,12 @@ function AdminStats() {
                     <h3 className="text-2xl font-bold text-white">{formatPrice(chartData.totalRevenue)}</h3>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-2xl p-6 shadow-xl">
+                <div className="bg-gradient-to-br from-gold-500 to-gold-700 rounded-2xl p-6 shadow-xl">
                     <div className="flex items-center gap-3 mb-2">
-                        <i className="fas fa-clipboard-list text-white text-2xl"></i>
+                        <i className="fas fa-clipboard-list text-navy-950 text-2xl"></i>
                     </div>
-                    <p className="text-purple-200 text-sm">Reservas Confirmadas</p>
-                    <h3 className="text-4xl font-bold text-white">{reservationsByStatus.confirmada || 0}</h3>
+                    <p className="text-navy-900 text-sm">Reservas Confirmadas</p>
+                    <h3 className="text-4xl font-bold text-navy-950">{reservationsByStatus.confirmada || 0}</h3>
                 </div>
 
                 <div className="bg-gradient-to-br from-yellow-600 to-orange-600 rounded-2xl p-6 shadow-xl">
