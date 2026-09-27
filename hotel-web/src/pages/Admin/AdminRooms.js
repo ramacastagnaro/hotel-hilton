@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import {
+    createRoom,
+    deleteRoom,
+    getRooms,
+    updateRoom,
+} from '../../services/roomsService';
+import { formatPrice } from '../../utils/format';
 
 function AdminRooms() {
     const [rooms, setRooms] = useState([]);
@@ -25,29 +32,15 @@ function AdminRooms() {
     const fetchRooms = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:4000/api/rooms');
-            
-            if (!response.ok) {
-                throw new Error('Error al obtener habitaciones');
-            }
-            
-            const data = await response.json();
+            const data = await getRooms();
             setRooms(data);
             setLoading(false);
-            
+
         } catch (err) {
             console.error('Error al cargar habitaciones:', err);
             setError(err.message);
             setLoading(false);
         }
-    };
-
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0
-        }).format(price);
     };
 
     const handleEdit = (room) => {
@@ -66,12 +59,8 @@ function AdminRooms() {
     const handleDelete = async (roomId) => {
         if (window.confirm('¿Estás seguro de que deseas eliminar esta habitación?')) {
             try {
-                const response = await fetch(`http://localhost:4000/api/rooms/${roomId}`, {
-                    method: 'DELETE'
-                });
-                
-                if (!response.ok) throw new Error('Error al eliminar habitación');
-                
+                await deleteRoom(roomId);
+
                 setRooms(rooms.filter(r => r.room_id !== roomId));
                 alert('Habitación eliminada correctamente');
             } catch (err) {
@@ -98,6 +87,8 @@ function AdminRooms() {
         e.preventDefault();
         
         try {
+            // Preservar los datos existentes (JSONB) al editar: no se deben
+            // destruir services/tariffs/images ni enviar tariffs como objeto.
             const roomData = {
                 room_id: editingRoom ? editingRoom.room_id : `room-${Date.now()}`,
                 name: formData.name,
@@ -105,25 +96,17 @@ function AdminRooms() {
                 description: formData.description,
                 capacity: parseInt(formData.capacity) || 2,
                 price: parseFloat(formData.price) || 0,
-                images: [formData.image],
-                services: [],
-                tariffs: {}
+                images: formData.image ? [formData.image] : (editingRoom?.images || []),
+                services: editingRoom?.services ?? [],
+                tariffs: editingRoom?.tariffs ?? []
             };
-            
-            const url = editingRoom 
-                ? `http://localhost:4000/api/rooms/${editingRoom.room_id}`
-                : 'http://localhost:4000/api/rooms';
-            
-            const method = editingRoom ? 'PUT' : 'POST';
-            
-            const response = await fetch(url, {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(roomData)
-            });
-            
-            if (!response.ok) throw new Error('Error al guardar habitación');
-            
+
+            if (editingRoom) {
+                await updateRoom(editingRoom.room_id, roomData);
+            } else {
+                await createRoom(roomData);
+            }
+
             await fetchRooms();
             setShowModal(false);
             alert(editingRoom ? 'Habitación actualizada correctamente' : 'Habitación creada correctamente');

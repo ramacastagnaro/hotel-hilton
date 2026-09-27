@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 function AdminLayout({ children }) {
     const location = useLocation();
     const navigate = useNavigate();
+    const { logout } = useAuth();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const menuItems = [
@@ -22,8 +24,13 @@ function AdminLayout({ children }) {
         return location.pathname.startsWith(path);
     };
 
-    const handleLogout = () => {
-        // Aquí implementarás la lógica de logout
+    const handleLogout = async () => {
+        // Cerrar la sesión real de Firebase antes de salir del panel.
+        try {
+            await logout();
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+        }
         navigate('/');
     };
 

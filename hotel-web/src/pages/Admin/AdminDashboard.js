@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { getAdminStats } from '../../services/statsService';
+import { formatPrice } from '../../utils/format';
 
 function AdminDashboard() {
     const [stats, setStats] = useState({
@@ -10,10 +12,13 @@ function AdminDashboard() {
         totalRooms: 0
     });
     
+    // Canonical keys returned by GET /api/admin/stats (singular, Spanish),
+    // including `completada` — the UI must only read fields the API returns.
     const [reservationsByStatus, setReservationsByStatus] = useState({
-        confirmadas: 0,
-        pendientes: 0,
-        canceladas: 0
+        confirmada: 0,
+        pendiente: 0,
+        completada: 0,
+        cancelada: 0
     });
     
     const [loading, setLoading] = useState(true);
@@ -24,13 +29,7 @@ function AdminDashboard() {
         const fetchStats = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:4000/api/admin/stats');
-                
-                if (!response.ok) {
-                    throw new Error('Error al obtener estadísticas');
-                }
-                
-                const data = await response.json();
+                const data = await getAdminStats();
                 setStats({
                     totalUsers: data.totalUsers,
                     totalReservations: data.totalReservations,
@@ -49,14 +48,6 @@ function AdminDashboard() {
         
         fetchStats();
     }, []);
-
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0
-        }).format(price);
-    };
 
     if (loading) {
         return (
@@ -145,11 +136,11 @@ function AdminDashboard() {
                     <h2 className="text-2xl font-bold text-white">Estado de Reservas</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {/* Confirmadas */}
                     <div className="text-center">
                         <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center shadow-lg">
-                            <span className="text-5xl font-bold text-white">{reservationsByStatus.confirmadas}</span>
+                            <span className="text-5xl font-bold text-white">{reservationsByStatus.confirmada || 0}</span>
                         </div>
                         <p className="text-green-400 font-bold text-lg">Confirmadas</p>
                     </div>
@@ -157,15 +148,23 @@ function AdminDashboard() {
                     {/* Pendientes */}
                     <div className="text-center">
                         <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg">
-                            <span className="text-5xl font-bold text-white">{reservationsByStatus.pendientes}</span>
+                            <span className="text-5xl font-bold text-white">{reservationsByStatus.pendiente || 0}</span>
                         </div>
                         <p className="text-yellow-400 font-bold text-lg">Pendientes</p>
+                    </div>
+
+                    {/* Completadas */}
+                    <div className="text-center">
+                        <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-cyan-500 to-blue-700 rounded-full flex items-center justify-center shadow-lg">
+                            <span className="text-5xl font-bold text-white">{reservationsByStatus.completada || 0}</span>
+                        </div>
+                        <p className="text-cyan-400 font-bold text-lg">Completadas</p>
                     </div>
 
                     {/* Canceladas */}
                     <div className="text-center">
                         <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center shadow-lg">
-                            <span className="text-5xl font-bold text-white">{reservationsByStatus.canceladas}</span>
+                            <span className="text-5xl font-bold text-white">{reservationsByStatus.cancelada || 0}</span>
                         </div>
                         <p className="text-red-400 font-bold text-lg">Canceladas</p>
                     </div>

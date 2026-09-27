@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { getAdminReservations, updateStatus } from '../../services/reservationsService';
+import { formatDate, formatPrice, statusColor } from '../../utils/format';
 
 function AdminReservations() {
     const [reservations, setReservations] = useState([]);
@@ -15,13 +17,7 @@ function AdminReservations() {
         const fetchReservations = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:4000/api/admin/reservations');
-                
-                if (!response.ok) {
-                    throw new Error('Error al obtener reservas');
-                }
-                
-                const data = await response.json();
+                const data = await getAdminReservations();
                 setReservations(data);
                 setLoading(false);
                 
@@ -35,43 +31,17 @@ function AdminReservations() {
         fetchReservations();
     }, []);
     
-    // Filtrar reservas
+    // Filtrar reservas (null-safe: campos opcionales pueden faltar)
     const filteredReservations = reservations.filter(reservation => {
-        const matchesSearch = reservation.client_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            reservation.client_email.toLowerCase().includes(searchTerm.toLowerCase());
+        const clientName = (reservation.client_name || '').toLowerCase();
+        const clientEmail = (reservation.client_email || '').toLowerCase();
+        const term = searchTerm.toLowerCase();
+        const matchesSearch = clientName.includes(term) || clientEmail.includes(term);
         const matchesStatus = filterStatus === 'all' || reservation.status === filterStatus;
         return matchesSearch && matchesStatus;
     });
 
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0
-        }).format(price);
-    };
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('es-AR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
-    };
-
-    const getStatusBadge = (status) => {
-        switch (status) {
-            case 'confirmada':
-                return 'bg-green-600 text-white';
-            case 'pendiente':
-                return 'bg-yellow-600 text-white';
-            case 'cancelada':
-                return 'bg-red-600 text-white';
-            default:
-                return 'bg-gray-600 text-white';
-        }
-    };
+    const getStatusBadge = (status) => `${statusColor(status)} text-white`;
 
     const getStatusIcon = (status) => {
         switch (status) {
@@ -81,6 +51,8 @@ function AdminReservations() {
                 return 'fa-clock';
             case 'cancelada':
                 return 'fa-times-circle';
+            case 'completada':
+                return 'fa-flag-checkered';
             default:
                 return 'fa-question-circle';
         }
@@ -88,14 +60,8 @@ function AdminReservations() {
 
     const handleStatusChange = async (reservationId, newStatus) => {
         try {
-            const response = await fetch(`http://localhost:4000/api/reservations/${reservationId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: newStatus })
-            });
-            
-            if (!response.ok) throw new Error('Error al actualizar reserva');
-            
+            await updateStatus(reservationId, newStatus);
+
             // Actualizar estado local
             setReservations(reservations.map(r => 
                 r.reservation_id === reservationId ? { ...r, status: newStatus } : r
@@ -212,7 +178,7 @@ function AdminReservations() {
                                     <h3 className="text-xl font-bold text-white">{reservation.room_name}</h3>
                                     <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-2 ${getStatusBadge(reservation.status)}`}>
                                         <i className={`fas ${getStatusIcon(reservation.status)}`}></i>
-                                        {reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)}
+                                        {(reservation.status || '').charAt(0).toUpperCase() + (reservation.status || '').slice(1)}
                                     </span>
                                 </div>
 
@@ -247,10 +213,7 @@ function AdminReservations() {
                             {/* Botón de cambiar estado */}
                             <div className="flex-shrink-0">
                                 <button
-                                    onClick={() => {
-                                        const newStatus = reservation.status === 'confirmada' ? 'pendiente' : 'confirmada';
-                                        handleStatusChange(reservation.reservation_id, newStatus);
-                                    }}
+                                    onClick={() => handleStatusChange(reservation.reservation_id, 'confirmada')}
                                     className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2">
                                     <i className="fas fa-check"></i>
                                     <span>Confirmar</span>

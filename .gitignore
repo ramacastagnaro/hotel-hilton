@@ -35,6 +35,10 @@ Thumbs.db
 *.temp
 .cache/
 
+# Herramientas locales (índices y cachés generados)
+.codegraph/
+.atl/
+
 # Coverage
 coverage/
 .nyc_output/

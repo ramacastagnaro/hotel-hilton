@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { auth } from '../../firebase/config';
+import { getOperators } from '../../services/operatorsService';
 
 function Header() {
   const { currentUser } = useAuth();
@@ -19,22 +20,15 @@ function Header() {
       if (currentUser?.email) {
         try {
           console.log('📡 Llamando a API de operadores...');
-          const response = await fetch(`http://localhost:4000/api/admin/operators`);
-          console.log('📡 Respuesta de API:', response.status);
-          
-          if (response.ok) {
-            const operators = await response.json();
-            console.log('📋 Operadores obtenidos:', operators);
-            
-            const operator = operators.find(op => op.email === currentUser.email);
-            if (operator) {
-              console.log('✅ Operador encontrado:', operator);
-              setOperatorData(operator);
-            } else {
-              console.log('❌ No es operador:', currentUser.email);
-            }
+          const operators = await getOperators();
+          console.log('📋 Operadores obtenidos:', operators);
+
+          const operator = operators.find(op => op.email === currentUser.email);
+          if (operator) {
+            console.log('✅ Operador encontrado:', operator);
+            setOperatorData(operator);
           } else {
-            console.error('❌ Error en respuesta API:', response.status);
+            console.log('❌ No es operador:', currentUser.email);
           }
         } catch (err) {
           console.error('❌ Error al verificar operador:', err);

@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import { useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+import { HOTEL } from '../../config/hotel';
 
 // ... (El código de configuración de los íconos que ya tenías)
 delete L.Icon.Default.prototype._getIconUrl;
@@ -23,8 +24,8 @@ function MapResizer() {
 
 
 function Map({ smallMap }) {
-    const defaultPosition = [-24.782, -65.423];
-    const zoomLevel = smallMap ? 10 : 13;
+    const defaultPosition = HOTEL.map.center;
+    const zoomLevel = smallMap ? HOTEL.map.smallZoom : HOTEL.map.zoom;
     const heightClass = 'h-full';
 
     return (
@@ -45,7 +46,7 @@ function Map({ smallMap }) {
 
                 <Marker position={defaultPosition}>
                 <Popup>
-                    Hotel Hilton. <br /> ¡Tu próxima estadía!
+                    {HOTEL.map.popup}
                 </Popup>
                 </Marker>
 

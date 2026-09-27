@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import OperatorLayout from '../../components/Operator/OperatorLayout';
+import { getOperatorStats } from '../../services/statsService';
 
 function OperatorDashboard() {
     const [stats, setStats] = useState({
@@ -17,13 +18,7 @@ function OperatorDashboard() {
         const fetchStats = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:4000/api/operator/stats');
-                
-                if (!response.ok) {
-                    throw new Error('Error al obtener estadísticas');
-                }
-                
-                const data = await response.json();
+                const data = await getOperatorStats();
                 setStats(data);
                 setLoading(false);
                 

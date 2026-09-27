@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { getUserReservations } from '../services/reservationsService';
+import { formatDate, formatPrice } from '../utils/format';
 
 function UserProfilePage() {
     const { currentUser, logout } = useAuth();
@@ -24,16 +26,9 @@ function UserProfilePage() {
             
             try {
                 setLoading(true);
-                const response = await fetch(`http://localhost:4000/api/reservations/user/${currentUser.uid}`);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('✅ Reservas obtenidas:', data);
-                    setReservations(data);
-                } else {
-                    console.log('No se encontraron reservas');
-                    setReservations([]);
-                }
+                const data = await getUserReservations(currentUser.uid);
+                console.log('✅ Reservas obtenidas:', data);
+                setReservations(data);
             } catch (err) {
                 console.error('❌ Error al cargar reservas:', err);
                 setReservations([]);
@@ -52,23 +47,6 @@ function UserProfilePage() {
         } catch (error) {
             console.error('Error al cerrar sesión:', error);
         }
-    };
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('es-AR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
-    };
-
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0
-        }).format(price);
     };
 
     const getStatusBadge = (status) => {

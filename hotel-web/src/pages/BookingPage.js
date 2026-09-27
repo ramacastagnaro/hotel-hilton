@@ -9,6 +9,7 @@ import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { auth } from '../firebase/config';
+import { createReservation } from '../services/reservationsService';
 
 function BookingPage(){
     const { currentUser } = useAuth();
@@ -123,23 +124,8 @@ function BookingPage(){
             };
 
             try {
-                // 2. Hacemos el 'fetch' a nuestra API con el método 'POST'
-                const response = await fetch('http://localhost:4000/api/reservations', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json', // Avisamos que enviamos JSON
-                    },
-                    body: JSON.stringify(reservationData), // Convertimos el objeto en un string JSON
-                });
-
-                if (!response.ok) {
-                    // Si el backend devuelve un error (ej. 500)
-                    const errorData = await response.json(); // Intenta leer el error del backend
-                    throw new Error(errorData.error || 'El servidor rechazó la reserva.');
-                }
-
-                // 3. ¡Éxito!
-                const newReservation = await response.json();
+                // 2. Enviamos la reserva a la API a través del servicio centralizado
+                const newReservation = await createReservation(reservationData);
                 console.log('Respuesta del backend:', newReservation);
                 
                 // 4. Redirigimos a la página de pago exitoso con los datos de la reserva

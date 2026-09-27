@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
 import PasswordResetModal from '../components/Modal/PasswordReset';
 import { auth } from '../firebase/config';
+import { loginOperator } from '../services/operatorsService';
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -17,36 +18,39 @@ function LoginPage() {
         setError('');
 
         try {
-            // Primero intentar login de operador/admin
-            if (email.includes('@hotel.com')) {
-                const response = await fetch('http://localhost:4000/api/operators/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                if (response.ok) {
-                    const operator = await response.json();
-                    console.log('Operador/Admin inició sesión:', operator);
-                    
-                    // Guardar datos en localStorage
-                    localStorage.setItem('operator', JSON.stringify(operator));
-                    
-                    // Redirigir según rol
-                    if (operator.role === 'admin') {
-                        alert('¡Bienvenido Administrador!');
-                        navigate('/admin');
-                    } else if (operator.role === 'operador') {
-                        alert('¡Bienvenido Operador!');
-                        navigate('/operador');
-                    }
-                    return;
-                }
-            }
-            
-            // Si no es operador, usar Firebase normal
+            // Authentication always happens in Firebase first. Operators and
+            // admins are Firebase users; their ID token is then exchanged for
+            // an operator profile (and role) via the backend.
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             console.log('Usuario inició sesión:', userCredential.user);
+
+            try {
+                const idToken = await userCredential.user.getIdToken();
+                const operator = await loginOperator({ idToken });
+                console.log('Operador/Admin inició sesión:', operator);
+
+                // Guardar datos en localStorage
+                localStorage.setItem('operator', JSON.stringify(operator));
+
+                // Redirigir según rol
+                if (operator.role === 'admin') {
+                    alert('¡Bienvenido Administrador!');
+                    navigate('/admin');
+                } else if (operator.role === 'operador') {
+                    alert('¡Bienvenido Operador!');
+                    navigate('/operador');
+                } else {
+                    navigate('/');
+                }
+                return;
+            } catch (operatorErr) {
+                // 403/404 => the signed-in user is not an operator/admin.
+                if (operatorErr.status !== 403 && operatorErr.status !== 404) {
+                    throw operatorErr;
+                }
+                console.warn('El usuario no es operador/admin:', operatorErr.message);
+            }
+
             alert('¡Inicio de sesión exitoso!');
             navigate('/');
             

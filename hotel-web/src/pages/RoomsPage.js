@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import RoomCard from '../components/RoomCard/RoomCard';
+import { getRooms } from '../services/roomsService';
 
 function RoomsPage() {
   const location = useLocation();
@@ -20,13 +21,7 @@ function RoomsPage() {
     const fetchRooms = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:4000/api/rooms');
-        
-        if (!response.ok) {
-          throw new Error('Error al obtener las habitaciones');
-        }
-        
-        const data = await response.json();
+        const data = await getRooms();
         console.log('✅ Habitaciones obtenidas del backend:', data);
         setRooms(data);
         setFilteredRooms(data);
