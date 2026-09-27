@@ -8,23 +8,23 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Logo y descripción */}
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4 font-serif">
+            <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600 mb-4 font-serif">
               {HOTEL.name}
             </h3>
             <p className="text-gray-400 leading-relaxed mb-4">
               {HOTEL.description}
             </p>
             <div className="flex gap-4">
-              <a href={HOTEL.social.facebook} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-500 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
+              <a href={HOTEL.social.facebook} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-navy-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
                 <i className="fab fa-facebook-f text-white text-lg"></i>
               </a>
-              <a href={HOTEL.social.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-pink-600 hover:to-purple-500 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
+              <a href={HOTEL.social.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-navy-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
                 <i className="fab fa-instagram text-white text-lg"></i>
               </a>
-              <a href={HOTEL.social.twitter} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-300 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
+              <a href={HOTEL.social.twitter} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-navy-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
                 <i className="fab fa-twitter text-white text-lg"></i>
               </a>
-              <a href={HOTEL.social.linkedin} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
+              <a href={HOTEL.social.linkedin} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-navy-800 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
                 <i className="fab fa-linkedin-in text-white text-lg"></i>
               </a>
             </div>

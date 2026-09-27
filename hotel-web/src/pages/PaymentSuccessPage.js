@@ -94,7 +94,7 @@ Hotel Hilton - Tu escapada de lujo
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center p-4 py-12">
+        <div className="min-h-screen bg-gradient-to-br from-navy-50 via-surface-50 to-gold-50 flex items-center justify-center p-4 py-12">
             <Helmet>
                 <title>¡Pago Exitoso! - Hotel Hilton</title>
             </Helmet>
@@ -116,11 +116,11 @@ Hotel Hilton - Tu escapada de lujo
                 </p>
 
                 {/* Número de confirmación */}
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-6 border border-blue-100">
+                <div className="bg-gradient-to-r from-navy-50 to-gold-50 rounded-2xl p-6 mb-6 border border-navy-100">
                     <p className="text-sm text-gray-600 text-center mb-2">
                         Número de Confirmación
                     </p>
-                    <p className="text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                    <p className="text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-navy-800 to-gold-500">
                         {generateConfirmationCode()}
                     </p>
                 </div>

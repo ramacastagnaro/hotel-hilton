@@ -46,7 +46,7 @@ const EVENT_STYLES = {
     icon: 'fa-trash',
   },
   login: {
-    color: 'bg-purple-100 text-purple-800 border-purple-300',
+    color: 'bg-gold-100 text-gold-800 border-gold-300',
     icon: 'fa-sign-in-alt',
   },
   other: {
@@ -102,7 +102,7 @@ function AdminLogs() {
       <AdminLayout>
         <div className="flex justify-center items-center h-64">
           <div className="text-center">
-            <i className="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
+            <i className="fas fa-spinner fa-spin text-4xl text-gold-400 mb-4"></i>
             <p className="text-gray-600">Cargando logs del sistema...</p>
           </div>
         </div>
@@ -157,9 +157,9 @@ function AdminLogs() {
     {
       group: 'update',
       label: 'Actualizaciones',
-      gradient: 'from-blue-500 to-blue-700',
-      text: 'text-blue-100',
-      iconText: 'text-blue-200',
+      gradient: 'from-navy-600 to-navy-800',
+      text: 'text-navy-100',
+      iconText: 'text-navy-200',
       icon: 'fa-edit',
     },
     {
@@ -173,9 +173,9 @@ function AdminLogs() {
     {
       group: 'login',
       label: 'Logins',
-      gradient: 'from-purple-500 to-purple-700',
-      text: 'text-purple-100',
-      iconText: 'text-purple-200',
+      gradient: 'from-gold-500 to-gold-700',
+      text: 'text-navy-900',
+      iconText: 'text-navy-900',
       icon: 'fa-sign-in-alt',
     },
   ];
@@ -191,7 +191,7 @@ function AdminLogs() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
-              <i className="fas fa-clipboard-list text-blue-600"></i>
+              <i className="fas fa-clipboard-list text-gold-400"></i>
               Logs del Sistema
             </h1>
             <p className="text-gray-600 mt-1">Registro de actividades del sistema</p>

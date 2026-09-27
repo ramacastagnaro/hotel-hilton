@@ -89,7 +89,7 @@ function UserProfilePage() {
                                     className="w-24 h-24 rounded-full border-4 border-blue-500 shadow-lg"
                                 />
                             ) : (
-                                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-navy-700 to-navy-900 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                                     {currentUser.displayName?.charAt(0) || currentUser.email?.charAt(0).toUpperCase()}
                                 </div>
                             )}

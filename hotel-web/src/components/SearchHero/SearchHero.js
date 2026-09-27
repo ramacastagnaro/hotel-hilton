@@ -99,7 +99,7 @@ function SearchHero() {
                         <p className="font-bold text-sm mt-2 text-gray-800">{guestText}</p>
                     </div>
 
-                    <button onClick={handleSearch} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 w-full md:w-auto mt-4 md:mt-0 flex items-center justify-center gap-3 shadow-lg hover:shadow-2xl hover:scale-105 transform">
+                    <button onClick={handleSearch} className="bg-gradient-to-r from-navy-800 to-gold-500 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 w-full md:w-auto mt-4 md:mt-0 flex items-center justify-center gap-3 shadow-lg hover:shadow-2xl hover:scale-105 transform">
                         <i className="fas fa-search text-lg"></i> 
                         <span>Buscar</span>
                     </button>

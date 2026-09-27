@@ -69,30 +69,30 @@ function Header() {
           <ul className="flex items-center space-x-8">
             <li><Link to="/" className="text-gray-700 hover:text-blue-600 font-semibold transition-all duration-200 hover:scale-105 relative group">
               Inicio
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-500 group-hover:w-full transition-all duration-300"></span>
             </Link></li>
             <li><Link to="/habitaciones" className="text-gray-700 hover:text-blue-600 font-semibold transition-all duration-200 hover:scale-105 relative group">
               Habitaciones
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-500 group-hover:w-full transition-all duration-300"></span>
             </Link></li>
             <li><Link to="/servicios" className="text-gray-700 hover:text-blue-600 font-semibold transition-all duration-200 hover:scale-105 relative group">
               Servicios
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-500 group-hover:w-full transition-all duration-300"></span>
             </Link></li>
             <li><Link to="/contacto" className="text-gray-700 hover:text-blue-600 font-semibold transition-all duration-200 hover:scale-105 relative group">
               Contacto
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-500 group-hover:w-full transition-all duration-300"></span>
             </Link></li>
             <li><Link to="/sobre-nosotros" className="text-gray-700 hover:text-blue-600 font-semibold transition-all duration-200 hover:scale-105 relative group">
               Sobre Nosotros
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-500 group-hover:w-full transition-all duration-300"></span>
             </Link></li>
             {/* menu de user*/}
             <li className="relative">
               {currentUser ? (
                 <>
                   <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="flex items-center focus:outline-none hover:opacity-80 transition-all duration-200"> {/* abre/cerrar menu */}
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 text-white flex items-center justify-center font-bold text-sm mr-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                    <div className="w-10 h-10 rounded-full bg-navy-800 text-white flex items-center justify-center font-bold text-sm mr-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                       {currentUser.email ? currentUser.email[0].toUpperCase() : 'U'}
                     </div>
                     <span className="text-sm font-semibold text-gray-700 hidden md:block">
@@ -106,7 +106,7 @@ function Header() {
                       <Link
                         to="/mi-cuenta"
                         onClick={() => setIsMenuOpen(false)}
-                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-200 rounded-lg mx-2">
+                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-surface-100 transition-all duration-200 rounded-lg mx-2">
                         <span className="flex items-center">
                           <i className="fas fa-user mr-3 text-blue-600"></i>
                           <span className="font-medium">Mi Cuenta</span>
@@ -147,7 +147,7 @@ function Header() {
                   )}
                 </>
               ) : (
-                <Link to="/login" className="text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6 py-2.5 rounded-full font-bold transition-all duration-300 text-sm shadow-lg hover:shadow-xl hover:scale-105">
+                <Link to="/login" className="text-white bg-gradient-to-r from-navy-800 to-gold-500 px-6 py-2.5 rounded-full font-bold transition-all duration-300 text-sm shadow-lg hover:shadow-xl hover:scale-105">
                   Iniciar Sesión
                 </Link>
               )}

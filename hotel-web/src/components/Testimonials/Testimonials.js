@@ -29,10 +29,10 @@ function Testimonials() {
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16 animate-fadeIn">
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                        Lo que dicen nuestros <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Huéspedes</span>
+                        Lo que dicen nuestros <span className="text-transparent bg-clip-text bg-gradient-to-r from-navy-800 to-gold-500">Huéspedes</span>
                     </h2>
                     <p className="text-gray-600 text-lg max-w-2xl mx-auto">Experiencias reales de quienes confiaron en nosotros</p>
-                    <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mt-4 rounded-full"></div>
+                    <div className="w-24 h-1 bg-gradient-to-r from-navy-800 to-gold-500 mx-auto mt-4 rounded-full"></div>
                 </div>
                 
                 {/* Usamos grid para las columnas */}
@@ -40,7 +40,7 @@ function Testimonials() {
                     {testimonialsData.map((testimonial, index) => (
                         <div key={testimonial.id} className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl flex flex-col transform hover:-translate-y-2 transition-all duration-300 border border-gray-100 group" style={{animationDelay: `${index * 0.1}s`}}>
                             <div className="flex items-center justify-between mb-6">
-                                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                                <div className="w-12 h-12 bg-gradient-to-br from-navy-700 to-navy-900 rounded-full flex items-center justify-center shadow-lg">
                                     <span className="text-white font-bold text-xl">{testimonial.name[0]}</span>
                                 </div>
                                 <div className="flex gap-1">

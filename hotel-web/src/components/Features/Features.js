@@ -1,11 +1,11 @@
 //iconos SVG simples para cada caracteristica
 const WifiIcon = () => (
-  <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+  <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-navy-700 to-navy-900 rounded-2xl flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
     <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071a10 10 0 0114.142 0M1.394 8.536a15 15 0 0121.212 0"></path></svg>
   </div>
 );
 const PoolIcon = () => (
-  <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+  <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-gold-500 to-gold-700 rounded-2xl flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
     <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h1a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.881 15.119A5.002 5.002 0 0012 17a5 5 0 004.119-1.881M17.881 12.119A5.002 5.002 0 0012 10a5 5 0 00-4.119 1.881"></path></svg>
   </div>
 );
@@ -22,10 +22,10 @@ function Features() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fadeIn">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-              Nuestros Servicios <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Principales</span>
+              Nuestros Servicios <span className="text-transparent bg-clip-text bg-gradient-to-r from-navy-800 to-gold-500">Principales</span>
             </h2>
             <p className="text-gray-600 mt-3 text-lg max-w-2xl mx-auto">Comodidades pensadas para una estadía inolvidable.</p>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mt-4 rounded-full"></div>
+            <div className="w-24 h-1 bg-gradient-to-r from-navy-800 to-gold-500 mx-auto mt-4 rounded-full"></div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           

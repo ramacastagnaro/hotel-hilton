@@ -122,7 +122,7 @@ function AdminReservations() {
                     onClick={() => setFilterStatus('all')}
                     className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
                         filterStatus === 'all'
-                            ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/50'
+                            ? 'bg-gradient-to-r from-navy-600 to-navy-800 text-white shadow-lg shadow-navy-500/50'
                             : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
                     }`}>
                     Todas ({stats.total})
@@ -161,7 +161,7 @@ function AdminReservations() {
                 {filteredReservations.map((reservation) => (
                     <div
                         key={reservation.reservation_id}
-                        className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl overflow-hidden shadow-xl border border-cyan-700/30 hover:border-cyan-500/50 transition-all duration-300">
+                        className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl overflow-hidden shadow-xl border border-navy-500/30 hover:border-navy-400/50 transition-all duration-300">
                         <div className="flex items-center gap-6 p-6">
                             {/* Imagen de la habitación */}
                             <div className="w-32 h-32 rounded-xl overflow-hidden flex-shrink-0">
@@ -190,7 +190,7 @@ function AdminReservations() {
                                     <div>
                                         <p className="text-gray-500">Check-in - Check-out</p>
                                         <p className="text-white font-semibold">
-                                            <i className="fas fa-calendar text-blue-400 mr-1"></i>
+                                            <i className="fas fa-calendar text-gold-400 mr-1"></i>
                                             {formatDate(reservation.start_date)} - {formatDate(reservation.end_date)}
                                         </p>
                                     </div>

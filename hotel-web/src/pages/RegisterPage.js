@@ -45,16 +45,16 @@ function RegisterPage() {
     };
 
     return(
-        <div className='min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center p-4 py-12'>
+        <div className='min-h-screen bg-gradient-to-br from-navy-50 via-surface-50 to-gold-50 flex items-center justify-center p-4 py-12'>
             <Helmet>
                 <title>Registro - Hotel Hilton</title>
             </Helmet>
             <div className='w-full max-w-md bg-white/90 backdrop-blur-md p-10 rounded-2xl shadow-2xl border border-white/20 animate-fadeIn'>
                 <div className="text-center mb-8">
-                    <div className="inline-block p-3 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-4 shadow-lg">
-                        <i className="fas fa-user-plus text-white text-3xl"></i>
+                    <div className="inline-block p-3 bg-navy-800 rounded-2xl mb-4 shadow-lg">
+                        <i className="fas fa-user-plus text-gold-400 text-3xl"></i>
                     </div>
-                    <h1 className='text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2'>Crear Cuenta</h1>
+                    <h1 className='text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-navy-800 to-gold-500 mb-2'>Crear Cuenta</h1>
                     <p className="text-gray-600">Únete a nuestra comunidad</p>
                 </div>
 
@@ -122,7 +122,7 @@ function RegisterPage() {
                 </form>
                 <p className="text-center text-sm text-gray-600 mt-8">
                     ¿Ya tienes una cuenta?{' '}
-                    <Link to="/login" className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200">
+                    <Link to="/login" className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-navy-800 to-gold-500 transition-all duration-200">
                         Inicia sesión aquí
                     </Link>
                 </p>
