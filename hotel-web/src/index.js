@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import { AuthProvider } from './context/AuthContext';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
@@ -9,7 +10,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </AuthProvider>
   </React.StrictMode>
 );

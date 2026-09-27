@@ -14,6 +14,7 @@ import BookingPage from './pages/BookingPage';
 import ContactPage from './pages/ContactPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
 import RegisterPage from './pages/RegisterPage';
 import RoomDetailPage from './pages/RoomDetailPage';
 import RoomsPage from './pages/RoomsPage';
@@ -78,6 +79,8 @@ function App() {
                 <Route path="/mi-cuenta" element={<AccountDashboardPage />} />
                 {/* Legacy links (e.g. PaymentSuccessPage) keep working. */}
                 <Route path="/perfil" element={<Navigate to="/mi-cuenta" replace />} />
+                {/* Catch-all: unknown URLs render a styled 404 instead of an empty <main>. */}
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </main>
             
