@@ -6,6 +6,7 @@ import {
     getReservations,
     updateStatus,
 } from '../../services/reservationsService';
+import { buttonStyles } from '../../utils/buttonStyles';
 import { formatDate, formatPrice, statusColor } from '../../utils/format';
 
 function OperatorReservations() {
@@ -51,7 +52,7 @@ function OperatorReservations() {
                     Error: {error}
                     <button 
                         onClick={fetchReservations}
-                        className="mt-2 px-4 py-2 bg-red-700 rounded hover:bg-red-800">
+                        className={buttonStyles({ variant: 'destructive', className: 'mt-2' })}>
                         Reintentar
                     </button>
                 </div>
@@ -192,14 +193,14 @@ function OperatorReservations() {
                             <div className="flex flex-col gap-2 ml-4">
                                 <button
                                     onClick={() => handleViewDetails(reservation)}
-                                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2 text-sm">
+                                    className={buttonStyles({ variant: 'primary', size: 'sm' })}>
                                     <i className="fas fa-eye"></i>
                                     <span>Ver</span>
                                 </button>
                                 {reservation.status === 'pendiente' && (
                                     <button
                                         onClick={() => handleConfirm(reservation.reservation_id)}
-                                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2 text-sm">
+                                        className={buttonStyles({ variant: 'confirm', size: 'sm' })}>
                                         <i className="fas fa-check"></i>
                                         <span>Confirmar</span>
                                     </button>
@@ -207,7 +208,7 @@ function OperatorReservations() {
                                 {reservation.status === 'confirmada' && (
                                     <button
                                         onClick={() => handleComplete(reservation.reservation_id)}
-                                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2 text-sm">
+                                        className={buttonStyles({ variant: 'primary', size: 'sm' })}>
                                         <i className="fas fa-check-double"></i>
                                         <span>Completar</span>
                                     </button>
@@ -215,7 +216,7 @@ function OperatorReservations() {
                                 {reservation.status !== 'cancelada' && reservation.status !== 'completada' && (
                                     <button
                                         onClick={() => handleLiberate(reservation.reservation_id)}
-                                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2 text-sm">
+                                        className={buttonStyles({ variant: 'destructive', size: 'sm' })}>
                                         <i className="fas fa-times"></i>
                                         <span>Liberar</span>
                                     </button>
@@ -236,6 +237,7 @@ function OperatorReservations() {
                             </h2>
                             <button
                                 onClick={() => setShowModal(false)}
+                                aria-label="Cerrar"
                                 className="text-gray-400 hover:text-white transition-colors">
                                 <i className="fas fa-times text-2xl"></i>
                             </button>
@@ -319,7 +321,7 @@ function OperatorReservations() {
 
                         <button
                             onClick={() => setShowModal(false)}
-                            className="w-full mt-6 px-4 py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all">
+                            className={buttonStyles({ variant: 'secondary', size: 'lg', className: 'w-full mt-6' })}>
                             Cerrar
                         </button>
                     </div>

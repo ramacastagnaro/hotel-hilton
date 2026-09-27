@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation } from 'react-router-dom';
+import { buttonStyles } from '../utils/buttonStyles';
 
 function PaymentSuccessPage() {
     const location = useLocation();
@@ -160,21 +161,21 @@ Hotel Hilton - Tu escapada de lujo
                 <div className="space-y-3">
                     <button 
                         onClick={handleDownloadPDF}
-                        className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2">
+                        className={buttonStyles({ variant: 'primary', size: 'lg', className: 'w-full' })}>
                         <i className="fas fa-file-pdf"></i>
                         <span>Descargar Ticket PDF</span>
                     </button>
 
                     <Link
                         to="/perfil"
-                        className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2">
+                        className={buttonStyles({ variant: 'confirm', size: 'lg', className: 'w-full' })}>
                         <i className="fas fa-user-circle"></i>
                         <span>Ir al Panel de Usuario</span>
                     </Link>
 
                     <Link
                         to="/"
-                        className="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2">
+                        className={buttonStyles({ variant: 'secondary', size: 'lg', className: 'w-full' })}>
                         <i className="fas fa-home"></i>
                         <span>Volver al Inicio</span>
                     </Link>

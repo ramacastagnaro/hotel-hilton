@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 // Este componente recibe la información de una tarifa a través de 'props'
 function TariffCard({ room, tariff, checkInDate, checkOutDate, nights, totalPrice }) {
@@ -44,7 +45,7 @@ function TariffCard({ room, tariff, checkInDate, checkOutDate, nights, totalPric
                 <p className="text-sm text-gray-500">por noche</p>
                 <button
                     onClick={handleSelectTarrif}
-                    className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300 mt-3 inline-block">
+                    className={buttonStyles({ variant: 'primary', size: 'lg', className: 'mt-3' })}>
                     Elegir
                 </button>
             </div>

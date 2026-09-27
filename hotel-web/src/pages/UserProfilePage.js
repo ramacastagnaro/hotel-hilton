@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getUserReservations } from '../services/reservationsService';
 import { formatDate, formatPrice } from '../utils/format';
+import { buttonStyles } from '../utils/buttonStyles';
 
 function UserProfilePage() {
     const { currentUser, logout } = useAuth();
@@ -113,7 +114,7 @@ function UserProfilePage() {
                         {/* Botón de cerrar sesión */}
                         <button
                             onClick={handleLogout}
-                            className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2">
+                            className={buttonStyles({ variant: 'destructive', size: 'lg' })}>
                             <i className="fas fa-sign-out-alt"></i>
                             Cerrar Sesión
                         </button>
@@ -125,21 +126,13 @@ function UserProfilePage() {
                     <div className="flex border-b">
                         <button
                             onClick={() => setActiveTab('reservations')}
-                            className={`flex-1 px-6 py-4 font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
-                                activeTab === 'reservations'
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
-                            }`}>
+                            className={buttonStyles({ variant: activeTab === 'reservations' ? 'primary' : 'ghost', className: 'flex-1 !rounded-none py-4' })}>
                             <i className="fas fa-calendar-check"></i>
                             Mis Reservas
                         </button>
                         <button
                             onClick={() => setActiveTab('profile')}
-                            className={`flex-1 px-6 py-4 font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
-                                activeTab === 'profile'
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
-                            }`}>
+                            className={buttonStyles({ variant: activeTab === 'profile' ? 'primary' : 'ghost', className: 'flex-1 !rounded-none py-4' })}>
                             <i className="fas fa-user"></i>
                             Mi Perfil
                         </button>
@@ -166,7 +159,7 @@ function UserProfilePage() {
                                         <p className="text-gray-500 mb-6">¡Explora nuestras habitaciones y haz tu primera reserva!</p>
                                         <button
                                             onClick={() => navigate('/habitaciones')}
-                                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
+                                            className={buttonStyles({ variant: 'primary', size: 'lg' })}>
                                             Ver Habitaciones
                                         </button>
                                     </div>
@@ -222,7 +215,7 @@ function UserProfilePage() {
                                                                     {formatPrice(reservation.total_price)}
                                                                 </p>
                                                             </div>
-                                                            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2">
+                                                            <button className={buttonStyles({ variant: 'primary' })}>
                                                                 <i className="fas fa-eye"></i>
                                                                 Ver Detalles
                                                             </button>

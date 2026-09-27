@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { auth } from '../firebase/config';
 import { createReservation } from '../services/reservationsService';
+import { buttonStyles } from '../utils/buttonStyles';
 
 function BookingPage(){
     const { currentUser } = useAuth();
@@ -49,6 +50,7 @@ function BookingPage(){
     const [createAccount, setCreateAccount] = useState(false);
     const [password, setPassword] = useState('');
     const [paymentMethod, setPaymentMethod] = useState(''); // 'mercadopago', 'paypal', 'card'
+    const [isSaving, setIsSaving] = useState(false); // BTN-4: disable submit while the request is in flight
 
     //navegacion segura
     useEffect(() => {
@@ -123,6 +125,7 @@ function BookingPage(){
                 firebaseUID
             };
 
+            setIsSaving(true);
             try {
                 // 2. Enviamos la reserva a la API a través del servicio centralizado
                 const newReservation = await createReservation(reservationData);
@@ -141,6 +144,8 @@ function BookingPage(){
             } catch (err) {
                 console.error("Error al enviar la reserva:", err);
                 alert('Ocurrió un error al procesar tu reserva: ' + err.message);
+            } finally {
+                setIsSaving(false);
             }
         }
     };
@@ -215,7 +220,7 @@ function BookingPage(){
                                 </select>
                             </div>
                             <div className="text-right pt-4">
-                                <button type="submit" className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700">
+                                <button type="submit" className={buttonStyles({ variant: 'primary' })}>
                                     Siguiente: Datos de Contacto →
                                 </button>
                             </div>
@@ -283,10 +288,10 @@ function BookingPage(){
 
                             {/* Botones de Navegacion */}
                             <div className="flex justify-between pt-4">
-                                <button type="button" onClick={() => setStep(1)} className="text-gray-600 hover:text-gray-900 font-medium py-2 px-4 rounded-lg">
+                                <button type="button" onClick={() => setStep(1)} className={buttonStyles({ variant: 'ghost' })}>
                                     ← Volver
                                 </button>
-                                <button type="submit" className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700">
+                                <button type="submit" className={buttonStyles({ variant: 'primary' })}>
                                     Siguiente: Información de Pago →
                                 </button>
                             </div>
@@ -346,7 +351,7 @@ function BookingPage(){
                                 </button>
 
                                 <div className="flex justify-between pt-6 border-t mt-8">
-                                    <button type="button" onClick={() => setStep(2)} className="text-gray-600 hover:text-gray-900 font-medium py-2 px-4 rounded-lg">
+                                    <button type="button" onClick={() => setStep(2)} className={buttonStyles({ variant: 'ghost' })}>
                                         ← Volver
                                     </button>
                                 </div>
@@ -410,11 +415,17 @@ function BookingPage(){
 
                                 {/* Botones de Navegación */}
                                 <div className="flex justify-between pt-6 border-t mt-8">
-                                    <button type="button" onClick={() => setPaymentMethod('')} className="text-gray-600 hover:text-gray-900 font-medium py-2 px-4 rounded-lg">
+                                    <button type="button" onClick={() => setPaymentMethod('')} className={buttonStyles({ variant: 'ghost' })}>
                                         ← Cambiar método
                                     </button>
-                                    <button type="submit" className="bg-green-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-700 text-lg">
-                                        Confirmar y Pagar
+                                    <button type="submit" className={buttonStyles({ variant: 'confirm', size: 'lg' })} disabled={isSaving}>
+                                        {isSaving ? (
+                                            <>
+                                                <i className="fas fa-spinner fa-spin"></i> Procesando...
+                                            </>
+                                        ) : (
+                                            'Confirmar y Pagar'
+                                        )}
                                     </button>
                                 </div>
                             </form>

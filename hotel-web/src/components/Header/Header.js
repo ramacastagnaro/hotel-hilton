@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { auth } from '../../firebase/config';
 import { getOperators } from '../../services/operatorsService';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 function Header() {
   const { currentUser } = useAuth();
@@ -147,7 +148,7 @@ function Header() {
                   )}
                 </>
               ) : (
-                <Link to="/login" className="text-white bg-gradient-to-r from-navy-800 to-gold-500 px-6 py-2.5 rounded-full font-bold transition-all duration-300 text-sm shadow-lg hover:shadow-xl hover:scale-105">
+                <Link to="/login" className={buttonStyles({ variant: 'accent', className: 'rounded-full px-6 py-2.5 font-bold' })}>
                   Iniciar Sesión
                 </Link>
               )}

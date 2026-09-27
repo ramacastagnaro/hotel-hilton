@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import RoomCard from '../components/RoomCard/RoomCard';
 import { getRooms } from '../services/roomsService';
+import { buttonStyles } from '../utils/buttonStyles';
 
 function RoomsPage() {
   const location = useLocation();
@@ -93,7 +94,7 @@ function RoomsPage() {
             <p className="text-gray-600">{error}</p>
             <button 
               onClick={() => window.location.reload()}
-              className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+              className={buttonStyles({ variant: 'primary', className: 'mt-4' })}>
               Reintentar
             </button>
           </div>
@@ -129,11 +130,11 @@ function RoomsPage() {
                   <span className='text-sm font-medium text-gray-600 mr-2'>Categoría:</span>
                   {categories.map(category => (
                       <button key={category} onClick={() => handleCategoryChange(category)}
-                          className={`px-4 py-2 rounded-md text-sm font-medium transition duration-200 shadow-sm ${
-                              categoryFilter === category
-                              ? 'bg-blue-600 text-white ring-2 ring-blue-300'
-                              : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-300'
-                          }`}>
+                          className={buttonStyles({
+                              variant: categoryFilter === category ? 'primary' : 'secondary',
+                              size: 'sm',
+                              className: 'shadow-sm',
+                          })}>
                           {category === 'all' ? 'Todas' : category}
                       </button>
                   ))}

@@ -7,6 +7,7 @@ import {
     getOperators,
     updateOperator,
 } from '../../services/operatorsService';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 function AdminUsers() {
     const [users, setUsers] = useState([]);
@@ -60,7 +61,7 @@ function AdminUsers() {
                     <p><strong>Error:</strong> {error}</p>
                     <button 
                         onClick={fetchUsers}
-                        className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                        className={buttonStyles({ variant: 'destructive', className: 'mt-2' })}>
                         Reintentar
                     </button>
                 </div>
@@ -176,7 +177,7 @@ function AdminUsers() {
                 </div>
                 <button
                     onClick={handleNewUser}
-                    className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2">
+                    className={buttonStyles({ variant: 'primary' })}>
                     <i className="fas fa-plus"></i>
                     <span>Nuevo Usuario</span>
                 </button>
@@ -227,13 +228,13 @@ function AdminUsers() {
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => handleEdit(user)}
-                                        className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2">
+                                        className={buttonStyles({ variant: 'secondary' })}>
                                         <i className="fas fa-edit"></i>
                                         <span>Editar</span>
                                     </button>
                                     <button
                                         onClick={() => handleDelete(user.operator_id)}
-                                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2">
+                                        className={buttonStyles({ variant: 'destructive' })}>
                                         <i className="fas fa-trash"></i>
                                         <span>Eliminar</span>
                                     </button>
@@ -307,12 +308,12 @@ function AdminUsers() {
                                 <button
                                     type="button"
                                     onClick={() => setShowModal(false)}
-                                    className="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all">
+                                    className={buttonStyles({ variant: 'secondary', className: 'flex-1' })}>
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold rounded-xl transition-all shadow-lg">
+                                    className={buttonStyles({ variant: 'primary', className: 'flex-1' })}>
                                     {editingUser ? 'Guardar' : 'Crear'}
                                 </button>
                             </div>

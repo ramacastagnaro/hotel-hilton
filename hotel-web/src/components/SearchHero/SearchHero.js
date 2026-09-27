@@ -6,6 +6,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { useNavigate } from 'react-router-dom';
 import { HOTEL } from '../../config/hotel';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 function SearchHero() {
     const navigate = useNavigate();
@@ -99,7 +100,7 @@ function SearchHero() {
                         <p className="font-bold text-sm mt-2 text-gray-800">{guestText}</p>
                     </div>
 
-                    <button onClick={handleSearch} className="bg-gradient-to-r from-navy-800 to-gold-500 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 w-full md:w-auto mt-4 md:mt-0 flex items-center justify-center gap-3 shadow-lg hover:shadow-2xl hover:scale-105 transform">
+                    <button onClick={handleSearch} className={buttonStyles({ variant: 'accent', size: 'lg', className: 'w-full md:w-auto mt-4 md:mt-0' })}>
                         <i className="fas fa-search text-lg"></i> 
                         <span>Buscar</span>
                     </button>
@@ -128,25 +129,25 @@ function SearchHero() {
                         <div className="flex justify-between items-center mb-5">
                             <span className="font-bold text-gray-700">Adultos</span>
                             <div className="flex items-center gap-4">
-                                <button disabled={guests.adults <= 1} onClick={() => handleGuestChange('adults', 'decrease')} className="w-10 h-10 border-2 border-blue-600 rounded-full text-lg disabled:opacity-30 hover:bg-blue-50 transition-all duration-200 font-bold text-blue-600 disabled:border-gray-300">-</button>
+                                <button disabled={guests.adults <= 1} onClick={() => handleGuestChange('adults', 'decrease')} aria-label="Quitar un adulto" className={buttonStyles({ variant: 'secondary', size: 'sm', className: 'w-10 h-10 !p-0 !rounded-full' })}>-</button>
                                 <span className="font-bold text-lg min-w-[30px] text-center">{guests.adults}</span>
-                                <button onClick={() => handleGuestChange('adults', 'increase')} className="w-10 h-10 border-2 border-blue-600 rounded-full text-lg hover:bg-blue-50 transition-all duration-200 font-bold text-blue-600">+</button>
+                                <button onClick={() => handleGuestChange('adults', 'increase')} aria-label="Agregar un adulto" className={buttonStyles({ variant: 'secondary', size: 'sm', className: 'w-10 h-10 !p-0 !rounded-full' })}>+</button>
                             </div>
                         </div>
                         <div className="flex justify-between items-center mb-5">
                             <span className="font-bold text-gray-700">Niños</span>
                             <div className="flex items-center gap-4">
-                                <button disabled={guests.children <= 0} onClick={() => handleGuestChange('children', 'decrease')} className="w-10 h-10 border-2 border-purple-600 rounded-full text-lg disabled:opacity-30 hover:bg-purple-50 transition-all duration-200 font-bold text-purple-600 disabled:border-gray-300">-</button>
+                                <button disabled={guests.children <= 0} onClick={() => handleGuestChange('children', 'decrease')} aria-label="Quitar un niño" className={buttonStyles({ variant: 'secondary', size: 'sm', className: 'w-10 h-10 !p-0 !rounded-full' })}>-</button>
                                 <span className="font-bold text-lg min-w-[30px] text-center">{guests.children}</span>
-                                <button onClick={() => handleGuestChange('children', 'increase')} className="w-10 h-10 border-2 border-purple-600 rounded-full text-lg hover:bg-purple-50 transition-all duration-200 font-bold text-purple-600">+</button>
+                                <button onClick={() => handleGuestChange('children', 'increase')} aria-label="Agregar un niño" className={buttonStyles({ variant: 'secondary', size: 'sm', className: 'w-10 h-10 !p-0 !rounded-full' })}>+</button>
                             </div>
                         </div>
                         <div className="flex justify-between items-center">
                             <span className="font-bold text-gray-700">Habitaciones</span>
                             <div className="flex items-center gap-4">
-                                <button disabled={guests.rooms <= 1} onClick={() => handleGuestChange('rooms', 'decrease')} className="w-10 h-10 border-2 border-green-600 rounded-full text-lg disabled:opacity-30 hover:bg-green-50 transition-all duration-200 font-bold text-green-600 disabled:border-gray-300">-</button>
+                                <button disabled={guests.rooms <= 1} onClick={() => handleGuestChange('rooms', 'decrease')} aria-label="Quitar una habitación" className={buttonStyles({ variant: 'secondary', size: 'sm', className: 'w-10 h-10 !p-0 !rounded-full' })}>-</button>
                                 <span className="font-bold text-lg min-w-[30px] text-center">{guests.rooms}</span>
-                                <button onClick={() => handleGuestChange('rooms', 'increase')} className="w-10 h-10 border-2 border-green-600 rounded-full text-lg hover:bg-green-50 transition-all duration-200 font-bold text-green-600">+</button>
+                                <button onClick={() => handleGuestChange('rooms', 'increase')} aria-label="Agregar una habitación" className={buttonStyles({ variant: 'secondary', size: 'sm', className: 'w-10 h-10 !p-0 !rounded-full' })}>+</button>
                             </div>
                         </div>
                     </div>

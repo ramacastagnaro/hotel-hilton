@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import RoomDetailModal from '../components/Modal/RoomDetailModal';
 import TariffCard from '../components/TariffCard/TariffCard';
 import { getRoom } from '../services/roomsService';
+import { buttonStyles } from '../utils/buttonStyles';
 
 function RoomDetailPage() {
     const { id } = useParams();
@@ -75,7 +76,7 @@ function RoomDetailPage() {
                         <p className="text-gray-600 mb-4">{error || 'La habitación que buscas no existe'}</p>
                         <a 
                             href="/habitaciones"
-                            className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            className={buttonStyles({ variant: 'primary' })}>
                             Ver todas las habitaciones
                         </a>
                     </div>
@@ -104,7 +105,7 @@ function RoomDetailPage() {
 
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="text-blue-600 hover:text-blue-800 font-semibold mb-6 text-sm">
+                            className={buttonStyles({ variant: 'ghost', size: 'sm', className: 'mb-6' })}>
                             Ver más detalles de la habitación →
                         </button>
 

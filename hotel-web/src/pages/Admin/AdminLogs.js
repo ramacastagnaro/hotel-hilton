@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
 import { getLogs } from '../../services/logsService';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 // Canonical system_logs contract read by this page:
 // { log_id, event_type, description, user_email, created_at }
@@ -119,7 +120,7 @@ function AdminLogs() {
           </p>
           <button
             onClick={fetchLogs}
-            className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+            className={buttonStyles({ variant: 'destructive', className: 'mt-2' })}>
             Reintentar
           </button>
         </div>
@@ -198,7 +199,7 @@ function AdminLogs() {
           </div>
           <button
             onClick={fetchLogs}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+            className={buttonStyles({ variant: 'primary' })}>
             <i className="fas fa-sync-alt"></i>
             Actualizar
           </button>
@@ -213,11 +214,10 @@ function AdminLogs() {
                 <button
                   key={filter.id}
                   onClick={() => setFilterEvent(filter.id)}
-                  className={`px-4 py-2 rounded-lg transition-colors ${
-                    filterEvent === filter.id
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}>
+                  className={buttonStyles({
+                    variant: filterEvent === filter.id ? 'primary' : 'secondary',
+                    size: 'sm',
+                  })}>
                   {filter.label}
                 </button>
               ))}

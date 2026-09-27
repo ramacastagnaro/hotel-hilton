@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 function AdminLayout({ children }) {
     const location = useLocation();
@@ -54,6 +55,7 @@ function AdminLayout({ children }) {
                         )}
                         <button
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                            aria-label="Alternar menú"
                             className="text-gray-400 hover:text-white transition-colors">
                             <i className={`fas ${isSidebarOpen ? 'fa-bars' : 'fa-bars'}`}></i>
                         </button>
@@ -102,11 +104,11 @@ function AdminLayout({ children }) {
                         <div className="flex items-center gap-4">
                             <button 
                                 onClick={() => window.location.reload()}
-                                className="px-4 py-2 bg-gold-500 hover:bg-gold-600 text-navy-950 rounded-lg transition-colors flex items-center gap-2 shadow-lg">
+                                className={buttonStyles({ variant: 'accent' })}>
                                 <i className="fas fa-sync-alt"></i>
                                 <span>Actualizar</span>
                             </button>
-                            <button className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors">
+                            <button aria-label="Notificaciones" className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors">
                                 <i className="fas fa-bell"></i>
                             </button>
                         </div>

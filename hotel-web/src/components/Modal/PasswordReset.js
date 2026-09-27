@@ -1,6 +1,7 @@
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { useState } from 'react';
 import { auth } from '../../firebase/config';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 function PasswordReset({ onClose }){
     const [email, setEmail] = useState('');
@@ -37,6 +38,7 @@ function PasswordReset({ onClose }){
             <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
                 <button
                     onClick={onClose}
+                    aria-label="Cerrar"
                     className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl"
                 >
                     &times;
@@ -63,7 +65,7 @@ function PasswordReset({ onClose }){
                         />
                     </div>
                     <div className="pt-2">
-                        <button type="submit" className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
+                        <button type="submit" className={buttonStyles({ variant: 'primary', className: 'w-full' })}>
                             Enviar Instrucciones
                         </button>
                     </div>

@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import PasswordResetModal from '../components/Modal/PasswordReset';
 import { auth } from '../firebase/config';
 import { loginOperator } from '../services/operatorsService';
+import { buttonStyles } from '../utils/buttonStyles';
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -142,14 +143,14 @@ function LoginPage() {
                     <div className="pt-2">
                         <button
                             type="submit"
-                            className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2">
+                            className={buttonStyles({ variant: 'primary', size: 'lg', className: 'w-full' })}>
                             <span>Ingresar</span>
                             <i className="fas fa-arrow-right"></i>
                         </button>
                     </div>
 
                     <div className="flex items-center justify-center text-right text-sm mt-2">
-                        <button type="button" onClick={() => setShowResetModal(true)} className="font-semibold text-blue-600 hover:text-blue-700 transition-colors duration-200 flex items-center gap-2">
+                        <button type="button" onClick={() => setShowResetModal(true)} className={buttonStyles({ variant: 'ghost', size: 'sm' })}>
                             <i className="fas fa-key text-xs"></i>
                             ¿Olvidaste tu contraseña?
                         </button>
@@ -163,7 +164,7 @@ function LoginPage() {
                 </div>
                 
 
-                <button onClick={handleGoogleSignIn} className="w-full flex items-center justify-center gap-3 border-2 border-gray-200 text-gray-700 font-semibold py-4 px-4 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 shadow-sm hover:shadow-md"> {/* Corregido hover:bg-gray-50 */}
+                <button onClick={handleGoogleSignIn} className={buttonStyles({ variant: 'secondary', size: 'lg', className: 'w-full gap-3 shadow-sm hover:shadow-md' })}> {/* Corregido hover:bg-gray-50 */}
                     <img src="/img/integrations-logo-google.webp" alt="Google Logo" className="h-6 w-6"/>
                     <span>Continuar con Google</span>
                 </button>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 //Este componente recibe informacion de una habitacion a traves de 'props'
 function RoomCard({ room }) {
@@ -31,7 +32,7 @@ function RoomCard({ room }) {
           {/* Este enlace más adelante nos llevará a la página de detalle de esta habitación */}
           <Link
             to={`/habitaciones/${room.room_id}`}
-            className="bg-gradient-to-r from-navy-800 to-gold-500 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2">
+            className={buttonStyles({ variant: 'primary' })}>
             Ver Detalles
             <i className="fas fa-arrow-right text-sm"></i>
           </Link>

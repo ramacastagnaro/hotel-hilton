@@ -18,6 +18,7 @@ function RoomDetailModal({ room, onClose }) {
         
             <button
                 onClick={onClose}
+                aria-label="Cerrar"
                 className="sticky top-0 right-0 float-right m-4 text-gray-500 hover:text-gray-800 text-3xl z-20 bg-white rounded-full px-2">
                 &times;
             </button>

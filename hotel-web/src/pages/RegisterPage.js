@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase/config'; //configuracion 'auth'
+import { buttonStyles } from '../utils/buttonStyles';
 
 function RegisterPage() {
     const navigate = useNavigate();
@@ -114,7 +115,7 @@ function RegisterPage() {
                     <div className="pt-2">
                         <button
                             type="submit"
-                            className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2">
+                            className={buttonStyles({ variant: 'primary', size: 'lg', className: 'w-full' })}>
                             <span>Registrarse</span>
                             <i className="fas fa-user-check"></i>
                         </button>

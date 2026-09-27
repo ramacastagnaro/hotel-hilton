@@ -17,6 +17,7 @@ import AdminLayout from '../../components/Admin/AdminLayout';
 import { CHART_COLORS } from '../../config/charts';
 import { getAdminCharts } from '../../services/statsService';
 import { formatPrice } from '../../utils/format';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 // Registrar componentes de Chart.js
 ChartJS.register(
@@ -88,7 +89,7 @@ function AdminStats() {
                     <p><strong>Error:</strong> {error}</p>
                     <button 
                         onClick={fetchChartData}
-                        className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                        className={buttonStyles({ variant: 'destructive', className: 'mt-2' })}>
                         Reintentar
                     </button>
                 </div>

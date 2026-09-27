@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { buttonStyles } from '../utils/buttonStyles';
 
 function AccountPage() {
     const { currentUser } = useAuth();
@@ -120,7 +121,7 @@ function AccountPage() {
                     <div className="text-right pt-2">
                         <button
                             type="submit"
-                            className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300"
+                            className={buttonStyles({ variant: 'primary' })}
                         >
                             Actualizar Contraseña
                         </button>

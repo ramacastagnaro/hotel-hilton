@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
 import { getAdminReservations, updateStatus } from '../../services/reservationsService';
 import { formatDate, formatPrice, statusColor } from '../../utils/format';
+import { buttonStyles } from '../../utils/buttonStyles';
 
 function AdminReservations() {
     const [reservations, setReservations] = useState([]);
@@ -120,38 +121,22 @@ function AdminReservations() {
             <div className="flex gap-4 mb-8">
                 <button
                     onClick={() => setFilterStatus('all')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'all'
-                            ? 'bg-gradient-to-r from-navy-600 to-navy-800 text-white shadow-lg shadow-navy-500/50'
-                            : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'all' ? 'primary' : 'secondary' })}>
                     Todas ({stats.total})
                 </button>
                 <button
                     onClick={() => setFilterStatus('confirmada')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'confirmada'
-                            ? 'bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'confirmada' ? 'primary' : 'secondary' })}>
                     Confirmadas ({stats.confirmadas})
                 </button>
                 <button
                     onClick={() => setFilterStatus('pendiente')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'pendiente'
-                            ? 'bg-gradient-to-r from-yellow-600 to-yellow-700 text-white shadow-lg'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'pendiente' ? 'primary' : 'secondary' })}>
                     Pendientes ({stats.pendientes})
                 </button>
                 <button
                     onClick={() => setFilterStatus('cancelada')}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                        filterStatus === 'cancelada'
-                            ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                    }`}>
+                    className={buttonStyles({ variant: filterStatus === 'cancelada' ? 'primary' : 'secondary' })}>
                     Canceladas ({stats.canceladas})
                 </button>
             </div>
@@ -214,7 +199,7 @@ function AdminReservations() {
                             <div className="flex-shrink-0">
                                 <button
                                     onClick={() => handleStatusChange(reservation.reservation_id, 'confirmada')}
-                                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-all duration-200 flex items-center gap-2">
+                                    className={buttonStyles({ variant: 'confirm' })}>
                                     <i className="fas fa-check"></i>
                                     <span>Confirmar</span>
                                 </button>
