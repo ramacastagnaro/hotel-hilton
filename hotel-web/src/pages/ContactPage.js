@@ -35,12 +35,12 @@ function ContactPage() {
         setStatusMessage('');
         setIsError(false);
 
-        // emailjs.sendForm
+        // EmailJS credentials are sourced from the environment (see hotel-web/.env.example).
         emailjs.sendForm(
-            'service_dbuswek',
-            'template_uukyim2',
+            process.env.REACT_APP_EMAILJS_SERVICE_ID,
+            process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
             form.current,
-            '2pNvQ3qqGkHqzK-P3'
+            process.env.REACT_APP_EMAILJS_PUBLIC_KEY
         )
         .then((result) => {
             console.log('Email enviado OK:', result.text);
