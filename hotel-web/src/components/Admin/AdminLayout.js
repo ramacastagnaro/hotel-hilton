@@ -8,6 +8,7 @@ function AdminLayout({ children }) {
     const navigate = useNavigate();
     const { logout, isDemo } = useAuth();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
     const menuItems = [
         { path: '/admin', icon: 'fas fa-chart-line', label: 'Resumen', exact: true },
@@ -37,8 +38,18 @@ function AdminLayout({ children }) {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900">
+            {/* Overlay del drawer mobile */}
+            {isMobileSidebarOpen && (
+                <button
+                    type="button"
+                    aria-label="Cerrar menú"
+                    onClick={() => setIsMobileSidebarOpen(false)}
+                    className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                />
+            )}
+
             {/* Sidebar */}
-            <aside className={`fixed top-0 left-0 h-full bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950 shadow-2xl transition-all duration-300 z-50 ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
+            <aside className={`fixed top-0 left-0 h-full bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950 shadow-2xl transition-transform duration-300 z-50 lg:transition-all ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
                 {/* Header del Sidebar */}
                     <div className="p-6 border-b border-navy-500/30">
                     <div className="flex items-center justify-between">
@@ -56,8 +67,14 @@ function AdminLayout({ children }) {
                         <button
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                             aria-label="Alternar menú"
-                            className="text-gray-400 hover:text-white transition-colors">
+                            className="hidden lg:inline-flex text-gray-400 hover:text-white transition-colors">
                             <i className={`fas ${isSidebarOpen ? 'fa-bars' : 'fa-bars'}`}></i>
+                        </button>
+                        <button
+                            onClick={() => setIsMobileSidebarOpen(false)}
+                            aria-label="Cerrar menú"
+                            className="lg:hidden text-gray-400 hover:text-white transition-colors">
+                            <i className="fas fa-times text-xl"></i>
                         </button>
                     </div>
                 </div>
@@ -68,6 +85,7 @@ function AdminLayout({ children }) {
                         <Link
                             key={item.path}
                             to={item.path}
+                            onClick={() => setIsMobileSidebarOpen(false)}
                             className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ${
                                 isActive(item.path, item.exact)
                                     ? 'bg-gold-500 text-navy-950 shadow-lg shadow-gold-500/40'
@@ -91,7 +109,7 @@ function AdminLayout({ children }) {
             </aside>
 
             {/* Contenido principal */}
-            <div className={`transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
+            <div className={`transition-all duration-300 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
                 {/* Aviso de solo lectura (rol demo) */}
                 {isDemo && (
                     <div
@@ -101,30 +119,40 @@ function AdminLayout({ children }) {
                     </div>
                 )}
                 {/* Header superior */}
-                <header className="bg-slate-800/50 backdrop-blur-md border-b border-navy-500/30 sticky top-0 z-40">
-                    <div className="px-6 py-4 flex items-center justify-between">
-                        <div>
-                            <h2 className="text-2xl font-bold text-white">
-                                {menuItems.find(item => isActive(item.path, item.exact))?.label || 'Panel de Administración'}
-                            </h2>
-                            <p className="text-gray-400 text-sm">Gestiona tu hotel desde aquí</p>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <button 
-                                onClick={() => window.location.reload()}
-                                className={buttonStyles({ variant: 'accent' })}>
-                                <i className="fas fa-sync-alt"></i>
-                                <span>Actualizar</span>
+                <header className="bg-slate-800/50 backdrop-blur-md border-b border-navy-500/30 sticky top-0 z-30">
+                    <div className="px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                            <button
+                                type="button"
+                                onClick={() => setIsMobileSidebarOpen(true)}
+                                aria-label="Abrir menú"
+                                className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-white hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 transition-colors shrink-0">
+                                <i className="fas fa-bars text-xl" aria-hidden="true"></i>
                             </button>
-                            <button aria-label="Notificaciones" className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors">
-                                <i className="fas fa-bell"></i>
+                            <div className="min-w-0">
+                                <h2 className="text-lg sm:text-2xl font-bold text-white truncate">
+                                    {menuItems.find(item => isActive(item.path, item.exact))?.label || 'Panel de Administración'}
+                                </h2>
+                                <p className="text-gray-400 text-sm hidden sm:block">Gestiona tu hotel desde aquí</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+                            <button
+                                onClick={() => window.location.reload()}
+                                aria-label="Actualizar"
+                                className={buttonStyles({ variant: 'accent' })}>
+                                <i className="fas fa-sync-alt" aria-hidden="true"></i>
+                                <span className="hidden sm:inline">Actualizar</span>
+                            </button>
+                            <button aria-label="Notificaciones" className="inline-flex items-center justify-center w-10 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors">
+                                <i className="fas fa-bell" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
                 </header>
 
                 {/* Contenido */}
-                <main className="p-6">
+                <main className="p-4 sm:p-6">
                     {children}
                 </main>
             </div>

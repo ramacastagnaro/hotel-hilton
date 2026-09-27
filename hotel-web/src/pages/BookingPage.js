@@ -156,20 +156,20 @@ function BookingPage(){
     }
 
     return (
-        <div className="container mx-auto p-4 py-12">
+        <div className="container mx-auto p-4 py-8 sm:py-12">
             <Helmet>
                 <title>Confirmar Reserva - Hotel Hilton</title>
             </Helmet>
 
-            <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">¡Último paso! Confirme su reserva ahora</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 sm:mb-8">¡Último paso! Confirmá tu reserva ahora</h1>
 
             <div className="lg:flex lg:gap-8">
                 {/* --- Columna Izquierda: FORMULARIO MULTI-PASO --- */}
-                <div className="lg:w-2/3 bg-white p-8 rounded-lg shadow-lg">
+                <div className="lg:w-2/3 bg-white p-4 sm:p-8 rounded-lg shadow-lg">
                 {/* Datos del Titular*/}
                 {step === 1 && (
                     <section>
-                        <h2 className="text-2xl font-bold mb-6 border-b pb-4"><i className="fas fa-user mr-2"></i> Datos del titular de la reserva</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold mb-6 border-b pb-4"><i className="fas fa-user mr-2"></i> Datos del titular de la reserva</h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
@@ -230,7 +230,7 @@ function BookingPage(){
                 {/* Datos de Contacto*/}
                 {step === 2 &&(
                     <section>
-                        <h2 className="text-2xl font-bold mb-6 border-b pb-4"><i className="fas fa-phone mr-2"></i> Datos de contacto</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold mb-6 border-b pb-4"><i className="fas fa-phone mr-2"></i> Datos de contacto</h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             
                             <div>
@@ -302,7 +302,7 @@ function BookingPage(){
                 {/* Info de pago - Paso 3 */}
                 {step === 3 && (
                     <section>
-                        <h2 className="text-2xl font-bold mb-6 border-b pb-4">
+                        <h2 className="text-xl sm:text-2xl font-bold mb-6 border-b pb-4">
                             <i className="fas fa-credit-card mr-2"></i> Información de pago
                         </h2>
                         
@@ -436,7 +436,7 @@ function BookingPage(){
                 
             {/* --- Columna Derecha: Resumen (Sidebar) --- */}
             <div className="lg:w-1/3 mt-8 lg:mt-0">
-                <div className="bg-white p-6 rounded-lg shadow-lg sticky top-24">
+                <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg lg:sticky lg:top-24">
                     <img src={room.images[0]} alt={room.name} className="w-full h-40 object-cover rounded-md mb-4" />
                     <h3 className="text-xl font-bold">{room.name}</h3>
                     <p className="text-sm text-gray-500 mb-4">{tariff.name}</p>
@@ -456,7 +456,7 @@ function BookingPage(){
                         </div>
                         <div className="flex justify-between mt-4 pt-4 border-t">
                             <span className="text-lg font-bold">Total:</span>
-                            <span className="text-2xl font-bold text-blue-600">${totalPrice.toLocaleString('es-AR')}</span>
+                            <span className="text-xl sm:text-2xl font-bold text-navy-800">${totalPrice.toLocaleString('es-AR')}</span>
                         </div>
                     </div>
                 </div>

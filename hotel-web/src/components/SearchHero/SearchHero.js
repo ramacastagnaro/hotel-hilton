@@ -53,35 +53,36 @@ function SearchHero() {
 
     return (
         <div
-            className="relative h-[75vh] bg-cover bg-center flex flex-col items-center justify-center text-white px-4"
+            className="relative min-h-[85vh] sm:min-h-[75vh] bg-cover bg-center flex flex-col items-center justify-center text-white px-4 py-12"
             style={{ backgroundImage: `url('/img/hero-background.jpg')` }}>
 
             <div className="absolute inset-0 bg-black/30"></div>
-            <div className="relative z-10 text-center mb-12 animate-fadeIn">
-                <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-2xl">
+            <div className="relative z-10 text-center mb-8 sm:mb-12 animate-fadeIn">
+                <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-4 sm:mb-6 drop-shadow-2xl">
                   Encuentra tu Estadía Perfecta
                 </h1>
-                <p className="text-xl md:text-2xl drop-shadow-lg font-light tracking-wide">Reserva las mejores habitaciones al mejor precio.</p>
+                <p className="text-base sm:text-xl md:text-2xl drop-shadow-lg font-light tracking-wide">Reserva las mejores habitaciones al mejor precio.</p>
             </div>
 
             <div className="relative max-w-5xl w-full">
 
                 {/* Search Bar */}
-                <div className="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl flex flex-col md:flex-row items-stretch md:items-center md:space-x-2 text-gray-800 border border-white/20 hover:shadow-3xl transition-all duration-300">
-                    <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 px-4 py-4 md:py-3 w-full md:flex-grow-[2] hover:bg-gray-50 transition-all duration-200 rounded-lg">
-                        <i className="fas fa-hotel text-blue-600 mr-3 text-xl"></i>
+                <div className="bg-white/95 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-2xl flex flex-col md:flex-row items-stretch md:items-center md:space-x-2 text-gray-800 border border-white/20 hover:shadow-3xl transition-all duration-300">
+                    <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 px-4 py-3 w-full md:flex-grow-[2] hover:bg-gray-50 transition-all duration-200 rounded-lg">
+                        <i className="fas fa-hotel text-navy-600 mr-3 text-xl" aria-hidden="true"></i>
                         {/* --- MODIFICACIÓN AQUÍ --- */}
                         <input
                             type="text"
                             value={HOTEL.name}
                             readOnly
-                            className="font-bold bg-transparent outline-none w-full font-serif text-lg text-gray-800" // <-- Añadido font-serif y text-lg
+                            aria-label="Hotel"
+                            className="font-bold bg-transparent outline-none w-full font-serif text-base sm:text-lg text-gray-800" // <-- Añadido font-serif y text-lg
                         />
                     </div>
                     {/* calendario / oculta huesp. */}
-                    <div className="cursor-pointer px-4 py-4 md:py-3 border-b md:border-b-0 md:border-r border-gray-200 w-full md:flex-grow text-center md:text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group" onClick={() => { setShowCalendar(!showCalendar); setShowGuestSelector(false); }}>
+                    <div className="cursor-pointer px-4 py-3 border-b md:border-b-0 md:border-r border-gray-200 w-full md:flex-grow text-center md:text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group" onClick={() => { setShowCalendar(!showCalendar); setShowGuestSelector(false); }}>
                         <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider flex items-center justify-center md:justify-start gap-2">
-                          <i className="fas fa-calendar-alt text-blue-600"></i>
+                          <i className="fas fa-calendar-alt text-navy-600" aria-hidden="true"></i>
                           Entrada - Salida
                         </span>
                         <p className="font-bold text-sm mt-2 text-gray-800">
@@ -90,34 +91,36 @@ function SearchHero() {
                     </div>
 
                     {/* muestra sector huespedes / oculta el calendario */}
-                    <div className='cursor-pointer px-4 py-4 md:py-3 w-full md:flex-grow text-center md:text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group' onClick={() => { setShowGuestSelector(!showGuestSelector); setShowCalendar(false); }}>
+                    <div className='cursor-pointer px-4 py-3 w-full md:flex-grow text-center md:text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group' onClick={() => { setShowGuestSelector(!showGuestSelector); setShowCalendar(false); }}>
                         <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider flex items-center justify-center md:justify-start gap-2">
-                          <i className="fas fa-users text-blue-600"></i>
+                          <i className="fas fa-users text-navy-600" aria-hidden="true"></i>
                           Huéspedes
                         </span>
                         <p className="font-bold text-sm mt-2 text-gray-800">{guestText}</p>
                     </div>
 
                     <button onClick={handleSearch} className={buttonStyles({ variant: 'accent', size: 'lg', className: 'w-full md:w-auto mt-4 md:mt-0' })}>
-                        <i className="fas fa-search text-lg"></i> 
+                        <i className="fas fa-search text-lg" aria-hidden="true"></i> 
                         <span>Buscar</span>
                     </button>
                 </div>
 
                 {/* Calendario flotante */}
                 {showCalendar && (
-                    <div className="absolute top-full mt-4 w-auto left-1/2 md:left-auto md:right-1/2 transform -translate-x-1/2 md:translate-x-0 z-20 shadow-2xl rounded-2xl overflow-hidden bg-white border border-gray-100 animate-fadeIn">
-                        <DateRange
-                            editableDateInputs={true}
-                            onChange={item => setDates([item.selection])}
-                            moveRangeOnFirstSelection={false}
-                            ranges={dates}
-                            rangeColors={["#3b82f6"]}
-                            locale={es}
-                            months={2}
-                            direction="horizontal"
-                            minDate={new Date()}
-                        />
+                    <div className="absolute top-full mt-4 w-[calc(100vw-2rem)] max-w-full left-1/2 -translate-x-1/2 md:left-auto md:right-1/2 md:translate-x-0 z-20 shadow-2xl rounded-2xl overflow-hidden bg-white border border-gray-100 animate-fadeIn">
+                        <div className="overflow-x-auto">
+                            <DateRange
+                                editableDateInputs={true}
+                                onChange={item => setDates([item.selection])}
+                                moveRangeOnFirstSelection={false}
+                                ranges={dates}
+                                rangeColors={["#C9A24B"]}
+                                locale={es}
+                                months={2}
+                                direction="horizontal"
+                                minDate={new Date()}
+                            />
+                        </div>
                     </div>
                 )}
 
