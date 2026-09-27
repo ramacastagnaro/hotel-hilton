@@ -182,7 +182,7 @@ function AdminRooms() {
                                 alt={room.name}
                                 className="w-full h-full object-cover"
                             />
-                            <div className="absolute top-4 right-4 px-3 py-1 bg-purple-600 text-white font-bold rounded-full text-sm">
+                            <div className="absolute top-4 right-4 px-3 py-1 bg-navy-700 text-white font-bold rounded-full text-sm">
                                 {room.category}
                             </div>
                         </div>

@@ -289,7 +289,7 @@ function OperatorPayments() {
                                             ? 'border-emerald-500 bg-emerald-600/30'
                                             : 'border-emerald-700/30 hover:border-emerald-600/50'
                                     }`}>
-                                    <i className="fas fa-credit-card text-purple-400 text-xl"></i>
+                                    <i className="fas fa-credit-card text-gold-400 text-xl"></i>
                                     <span className="text-white font-semibold">Tarjeta de Débito</span>
                                 </button>
 

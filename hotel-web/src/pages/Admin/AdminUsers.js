@@ -76,7 +76,7 @@ function AdminUsers() {
             case 'Admin':
                 return 'bg-red-600 text-white';
             case 'Operador':
-                return 'bg-purple-600 text-white';
+                return 'bg-navy-600 text-white';
             default:
                 return 'bg-blue-600 text-white';
         }
@@ -89,7 +89,7 @@ function AdminUsers() {
     const getAvatarColor = (id) => {
         const colors = [
             'from-blue-500 to-blue-700',
-            'from-purple-500 to-purple-700',
+            'from-navy-500 to-navy-700',
             'from-red-500 to-red-700',
             'from-green-500 to-green-700',
             'from-yellow-500 to-yellow-700'
