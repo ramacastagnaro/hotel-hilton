@@ -10,6 +10,7 @@ import adminRoutes from './routes/admin.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import logsRoutes from './routes/logs.routes.js';
 import operatorRoutes from './routes/operator.routes.js';
+import paymentsRoutes from './routes/payments.routes.js';
 import reservationsRoutes from './routes/reservations.routes.js';
 import roomsRoutes from './routes/rooms.routes.js';
 
@@ -34,6 +35,7 @@ app.get('/', async (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/rooms', roomsRoutes);
 app.use('/api/reservations', reservationsRoutes);
+app.use('/api/payments', paymentsRoutes);
 app.use('/api/logs', logsRoutes);
 
 // Admin / operator API surface. The guard is a warn-only passthrough while

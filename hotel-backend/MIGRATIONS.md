@@ -18,7 +18,7 @@ Database: Supabase (PostgreSQL). No local database is required.
 
 | # | File | What it does | Unlocks |
 |---|------|--------------|---------|
-| 1 | `migrate_reservations_payment.sql` | Adds `reservations.payment_status` + `payment_method`, backfills `pendiente` | PAY-1, PAY-2 |
+| 1 | `migrate_reservations_payment.sql` | Adds `reservations.payment_status` + `payment_method` + `mp_preference_id`, backfills `pendiente` | PAY-1, PAY-2, Mercado Pago checkout |
 | 2 | `migrate_rooms_status.sql` | Adds `rooms.status` (`disponible`/`ocupada`/`mantenimiento`) | OperatorRooms toggle persistence |
 | 3 | `reconcile_system_logs.sql` | Reconciles `system_logs` to `(log_id, event_type, description, user_email, created_at)` | Admin/operator log listing |
 | 4 | `reconcile_operators_firebase_uid.sql` | Ensures `operators.firebase_uid` and copies the legacy `password_hash` UID into it | OPER-3 (no lockout) |
@@ -71,3 +71,7 @@ Verify with the app:
 - Operator → Reservations can move a reservation `pendiente → confirmada → completada`.
 - A `demo` operator reaches `/api/admin` and `/api/operator` reads (200) but
   every `POST`/`PUT`/`PATCH`/`DELETE` returns 403.
+- `POST /api/payments/preference` returns an `init_point` and the reservation
+  row shows a non-null `mp_preference_id`.
+- After a real (or MP test) payment, `GET /api/payments/status?reservation_id=…`
+  reports `payment_status = 'completado'`.
