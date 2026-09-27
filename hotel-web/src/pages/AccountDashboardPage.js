@@ -221,7 +221,7 @@ function AccountDashboardPage() {
                         {/* Mis Reservas */}
                         {activeTab === 'reservations' && (
                             <div>
-                                <h2 className="text-xl sm:text-2xl font-bold text-navy-900 mb-6 flex items-center gap-2">
+                                <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-navy-900 mb-6 flex items-center gap-2">
                                     <i className="fas fa-list text-gold-600" aria-hidden="true"></i>
                                     Historial de Reservas
                                 </h2>
@@ -302,7 +302,7 @@ function AccountDashboardPage() {
                         {/* Mi Perfil */}
                         {activeTab === 'profile' && (
                             <div>
-                                <h2 className="text-xl sm:text-2xl font-bold text-navy-900 mb-6 flex items-center gap-2">
+                                <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-navy-900 mb-6 flex items-center gap-2">
                                     <i className="fas fa-user-circle text-gold-600" aria-hidden="true"></i>
                                     Información Personal
                                 </h2>
@@ -357,7 +357,7 @@ function AccountDashboardPage() {
                         {/* Seguridad */}
                         {activeTab === 'security' && (
                             <div className="max-w-xl">
-                                <h2 className="text-xl sm:text-2xl font-bold text-navy-900 mb-2 flex items-center gap-2">
+                                <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-navy-900 mb-2 flex items-center gap-2">
                                     <i className="fas fa-lock text-gold-600" aria-hidden="true"></i>
                                     Cambiar Contraseña
                                 </h2>

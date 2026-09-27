@@ -108,7 +108,7 @@ function PaymentSuccessPage() {
           <div className="w-14 h-14 mx-auto bg-danger-light rounded-full flex items-center justify-center">
             <i className="fas fa-circle-info text-2xl text-danger"></i>
           </div>
-          <h1 className="mt-4 text-xl font-serif font-bold text-navy-900">
+          <h1 className="mt-4 text-xl font-serif font-bold tracking-tight text-navy-900">
             No encontramos tu reserva
           </h1>
           <p className="mt-2 text-sm text-navy-700">
@@ -149,7 +149,7 @@ function PaymentSuccessPage() {
           </div>
         </div>
 
-        <h1 className="text-2xl font-serif font-bold text-center text-navy-900">
+        <h1 className="text-2xl font-serif font-bold tracking-tight text-center text-navy-900">
           ¡Pago Exitoso!
         </h1>
         <p className="text-center text-sm text-navy-700 mt-1 mb-5">

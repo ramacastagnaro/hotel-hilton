@@ -142,7 +142,7 @@ function RoomsPage() {
           </div>
       </div>
       <div className="text-center mb-10 mt-6 sm:mb-12 sm:mt-8">
-        <h1 className="text-2xl sm:text-4xl font-bold text-gray-800">Resultados de Búsqueda</h1>
+        <h1 className="text-2xl sm:text-4xl font-serif font-bold tracking-tight text-gray-800">Resultados de Búsqueda</h1>
         <p className="text-gray-600 mt-2">
           {filteredRooms.length} {filteredRooms.length === 1 ? 'habitación encontrada' : 'habitaciones encontradas'} para tu selección.
         </p>

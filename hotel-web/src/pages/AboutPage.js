@@ -9,13 +9,13 @@ function AboutPage() {
                 </Helmet>
 
                 <div className="text-center mb-12">
-                    <h1 className='text-4xl font-bold text-gray-800'>Nuestra Historia</h1>
+                    <h1 className='text-4xl font-serif font-bold tracking-tight text-gray-800'>Nuestra Historia</h1>
                     <p className="text-gray-600 mt-2">Pasion y dedicacion en cada detalle.</p>
                 </div>
 
                 <div className="md:flex md:items-center md:gap-12">
 
-                    <div className="md:w-1/2 text-gl text-gray-700 leading-relaxed">
+                    <div className="md:w-1/2 text-lg text-gray-700 leading-relaxed">
                         <p className="mb-6">
                             Fundado en 2010, el Hotel Hilton nació del sueño de crear un oasis de tranquilidad y lujo.
                             Lo que comenzó como un pequeño hotel familiar ha crecido hasta convertirse en un referente de hospitalidad, sin perder nunca el trato cercano y personal que nos caracteriza.

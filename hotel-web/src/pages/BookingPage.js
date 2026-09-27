@@ -161,7 +161,7 @@ function BookingPage(){
                 <title>Confirmar Reserva - Hotel Hilton</title>
             </Helmet>
 
-            <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 sm:mb-8">¡Último paso! Confirmá tu reserva ahora</h1>
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-center text-gray-800 mb-6 sm:mb-8">¡Último paso! Confirmá tu reserva ahora</h1>
 
             <div className="lg:flex lg:gap-8">
                 {/* --- Columna Izquierda: FORMULARIO MULTI-PASO --- */}

@@ -8,7 +8,7 @@ function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           {/* Logo y descripción */}
           <div className="col-span-1 sm:col-span-2">
-            <h3 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600 mb-4 font-serif">
+            <h3 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600 mb-4">
               {HOTEL.name}
             </h3>
             <p className="text-gray-400 leading-relaxed mb-4">

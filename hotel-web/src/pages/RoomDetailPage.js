@@ -102,7 +102,7 @@ function RoomDetailPage() {
                     </div>
                     {/* Contenedor de la Información y Tarifas */}
                     <div className="bg-white p-5 sm:p-8 rounded-card shadow-card">
-                        <h1 className="text-2xl sm:text-3xl font-extrabold text-navy-900 mb-2">{room.name}</h1>
+                        <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-navy-900 mb-2">{room.name}</h1>
                         <p className="text-base sm:text-lg text-navy-600 mb-4">{room.description}</p>
 
                         <button
@@ -112,7 +112,7 @@ function RoomDetailPage() {
                         </button>
 
                         <div className="border-t border-surface-200 pt-6">
-                            <h2 className="text-xl sm:text-2xl font-bold text-navy-900 mb-4">Elige tu tarifa</h2>
+                            <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-navy-900 mb-4">Elige tu tarifa</h2>
 
                             {tariffs.length === 0 ? (
                                 <div className="rounded-card border border-dashed border-surface-200 bg-surface-50 p-8 text-center">
