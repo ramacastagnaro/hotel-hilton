@@ -38,7 +38,6 @@ function RoomDetailPage() {
             try {
                 setLoading(true);
                 const data = await getRoom(id);
-                console.log('✅ Habitación obtenida:', data);
                 setRoom(data);
             } catch (err) {
                 console.error('❌ Error al cargar habitación:', err);

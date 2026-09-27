@@ -1,9 +1,11 @@
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { useState } from 'react';
 import { auth } from '../../firebase/config';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { buttonStyles } from '../../utils/buttonStyles';
 
 function PasswordReset({ onClose }){
+    const dialogRef = useFocusTrap(onClose);
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState(false);
@@ -35,16 +37,22 @@ function PasswordReset({ onClose }){
     return (
         //Fondo oscuro semitransparente
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+            <div
+                ref={dialogRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="password-reset-title"
+                className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
                 <button
+                    type="button"
                     onClick={onClose}
                     aria-label="Cerrar"
-                    className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl"
+                    className="absolute top-3 right-3 rounded-full text-gray-400 hover:text-gray-700 text-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
                 >
                     &times;
                 </button>
 
-                <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Restablecer Contraseña</h2>
+                <h2 id="password-reset-title" className="text-2xl font-bold text-center text-gray-800 mb-4">Restablecer Contraseña</h2>
                 <p className="text-center text-sm text-gray-600 mb-6">Ingresa tu correo electrónico y te enviaremos las instrucciones para crear una nueva contraseña.</p>
 
                 {message && (

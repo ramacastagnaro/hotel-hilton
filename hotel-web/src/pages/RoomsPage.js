@@ -8,7 +8,6 @@ import { buttonStyles } from '../utils/buttonStyles';
 function RoomsPage() {
   const location = useLocation();
   const searchData = location.state;
-  console.log('Datos de búsqueda recibidos:', searchData);
 
   const [rooms, setRooms] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -23,7 +22,6 @@ function RoomsPage() {
       try {
         setLoading(true);
         const data = await getRooms();
-        console.log('✅ Habitaciones obtenidas del backend:', data);
         setRooms(data);
         setFilteredRooms(data);
       } catch (err) {

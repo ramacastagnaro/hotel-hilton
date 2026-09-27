@@ -4,7 +4,6 @@ import { differenceInDays, format } from 'date-fns';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from 'react'; // <-- Importación de React corregida
 // import { useEffect, useState } from 'react'; // <-- Línea duplicada eliminada
-import 'react-datepicker/dist/react-datepicker.css'; //estilos
 import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { HOTEL } from '../config/hotel';
