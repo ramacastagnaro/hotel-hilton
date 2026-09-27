@@ -24,6 +24,7 @@ Database: Supabase (PostgreSQL). No local database is required.
 | 4 | `reconcile_operators_firebase_uid.sql` | Ensures `operators.firebase_uid` and copies the legacy `password_hash` UID into it | OPER-3 (no lockout) |
 | 5 | `migrate_reservada_to_pendiente.sql` | `UPDATE reservations SET status='pendiente' WHERE status='reservada'` | RESV-1 data |
 | 6 | `migrate_add_demo_role.sql` | Widens `operators.role` `CHECK` to `('admin','operador','demo')` | DEMO-1 (read-only demo role) |
+| 7 | `migrate_operators_password_hash_nullable.sql` | Drops the legacy `NOT NULL` on `operators.password_hash` | Creating operators (fixes `23502`) |
 
 Order matters:
 
@@ -35,6 +36,9 @@ Order matters:
   `reservada` rows cannot be confirmed or cancelled.
 - Run 6 before provisioning the `demo` operator, otherwise the `operators.role`
   `CHECK` rejects the new role value.
+- Run 7 before creating or editing an operator, otherwise the insert fails with
+  `23502: null value in column "password_hash" violates not-null constraint`
+  (the backend no longer writes that legacy column).
 
 ## Idempotency
 
