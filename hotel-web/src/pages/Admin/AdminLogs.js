@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { getLogs } from '../../services/logsService';
 
 function AdminLogs() {
     const [logs, setLogs] = useState([]);
@@ -15,10 +16,7 @@ function AdminLogs() {
     const fetchLogs = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:4000/api/admin/logs');
-            if (!response.ok) throw new Error('Error al obtener logs');
-            
-            const data = await response.json();
+            const data = await getLogs();
             setLogs(data);
             setError(null);
         } catch (err) {

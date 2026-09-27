@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import OperatorLayout from '../../components/Operator/OperatorLayout';
+import {
+    cancelReservation,
+    getReservations,
+    updateStatus,
+} from '../../services/reservationsService';
+import { formatDate, formatPrice, statusColor } from '../../utils/format';
 
 function OperatorReservations() {
     const [reservations, setReservations] = useState([]);
@@ -17,10 +23,7 @@ function OperatorReservations() {
     const fetchReservations = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:4000/api/reservations');
-            if (!response.ok) throw new Error('Error al obtener reservas');
-            
-            const data = await response.json();
+            const data = await getReservations();
             setReservations(data);
             setError(null);
         } catch (err) {
@@ -56,38 +59,6 @@ function OperatorReservations() {
         );
     }
 
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0
-        }).format(price);
-    };
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('es-AR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
-    };
-
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'confirmada':
-                return 'bg-green-600';
-            case 'pendiente':
-                return 'bg-yellow-600';
-            case 'cancelada':
-                return 'bg-red-600';
-            case 'completada':
-                return 'bg-blue-600';
-            default:
-                return 'bg-gray-600';
-        }
-    };
-
     const getPaymentStatusColor = (status) => {
         switch (status) {
             case 'pagado':
@@ -104,12 +75,8 @@ function OperatorReservations() {
     const handleLiberate = async (reservationId) => {
         if (window.confirm('¿Estás seguro de que deseas liberar esta reserva?')) {
             try {
-                const response = await fetch(`http://localhost:4000/api/reservations/${reservationId}`, {
-                    method: 'DELETE'
-                });
-                
-                if (!response.ok) throw new Error('Error al cancelar reserva');
-                
+                await cancelReservation(reservationId);
+
                 // Actualizar estado local
                 setReservations(reservations.map(r =>
                     r.reservation_id === reservationId ? { ...r, status: 'cancelada' } : r
@@ -123,14 +90,9 @@ function OperatorReservations() {
 
     const handleConfirm = async (reservationId) => {
         try {
-            const response = await fetch(`http://localhost:4000/api/reservations/${reservationId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: 'confirmada' })
-            });
-            
-            if (!response.ok) throw new Error('Error al confirmar reserva');
-            
+            // "Confirmar" siempre avanza a confirmada; nunca es un toggle invertido
+            await updateStatus(reservationId, 'confirmada');
+
             // Actualizar estado local
             setReservations(reservations.map(r =>
                 r.reservation_id === reservationId ? { ...r, status: 'confirmada' } : r
@@ -143,14 +105,8 @@ function OperatorReservations() {
 
     const handleComplete = async (reservationId) => {
         try {
-            const response = await fetch(`http://localhost:4000/api/reservations/${reservationId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: 'completada' })
-            });
-            
-            if (!response.ok) throw new Error('Error al completar reserva');
-            
+            await updateStatus(reservationId, 'completada');
+
             // Actualizar estado local
             setReservations(reservations.map(r =>
                 r.reservation_id === reservationId ? { ...r, status: 'completada' } : r
@@ -192,7 +148,7 @@ function OperatorReservations() {
                                     <h3 className="text-xl font-bold text-white">
                                         {reservation.reservation_code}
                                     </h3>
-                                    <span className={`px-3 py-1 ${getStatusColor(reservation.status)} text-white text-xs font-bold rounded-full`}>
+                                    <span className={`px-3 py-1 ${statusColor(reservation.status)} text-white text-xs font-bold rounded-full`}>
                                         {reservation.status}
                                     </span>
                                     <span className={`px-3 py-1 ${getPaymentStatusColor(reservation.payment_status)} text-white text-xs font-bold rounded-full`}>
@@ -337,7 +293,7 @@ function OperatorReservations() {
                                     </div>
                                     <div>
                                         <p className="text-gray-400">Estado</p>
-                                        <span className={`inline-block px-3 py-1 ${getStatusColor(selectedReservation.status)} text-white text-xs font-bold rounded-full`}>
+                                        <span className={`inline-block px-3 py-1 ${statusColor(selectedReservation.status)} text-white text-xs font-bold rounded-full`}>
                                             {selectedReservation.status}
                                         </span>
                                     </div>

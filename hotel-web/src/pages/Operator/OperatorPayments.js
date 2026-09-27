@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import OperatorLayout from '../../components/Operator/OperatorLayout';
+import { getReservations, updatePayment } from '../../services/reservationsService';
+import { formatPrice } from '../../utils/format';
 
 function OperatorPayments() {
     const [payments, setPayments] = useState([]);
@@ -18,15 +20,12 @@ function OperatorPayments() {
     const fetchPayments = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:4000/api/reservations');
-            if (!response.ok) throw new Error('Error al obtener pagos');
-            
-            const data = await response.json();
+            const data = await getReservations();
             // Convertir reservas a formato de pagos
             const paymentsData = data.map(reservation => ({
                 id: reservation.reservation_id,
                 reservation_code: `RES${String(reservation.reservation_id).padStart(3, '0')}`,
-                client_name: reservation.guest_name || 'Cliente',
+                client_name: reservation.client_name || 'Cliente',
                 room_number: reservation.room_id,
                 amount: reservation.total_price,
                 status: reservation.payment_status || 'pendiente',
@@ -68,14 +67,6 @@ function OperatorPayments() {
         );
     }
 
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0
-        }).format(price);
-    };
-
     const getStatusColor = (status) => {
         switch (status) {
             case 'completado':
@@ -94,22 +85,33 @@ function OperatorPayments() {
         setShowProcessModal(true);
     };
 
-    const confirmPayment = () => {
+    const confirmPayment = async () => {
         if (!paymentMethod) {
             alert('Por favor selecciona un método de pago');
             return;
         }
 
-        setPayments(payments.map(p =>
-            p.id === selectedPayment.id
-                ? { ...p, status: 'completado', method: paymentMethod }
-                : p
-        ));
+        try {
+            // Persistir el pago en el backend para que sobreviva a una recarga
+            await updatePayment(selectedPayment.id, {
+                payment_status: 'completado',
+                payment_method: paymentMethod
+            });
 
-        setShowProcessModal(false);
-        setPaymentMethod('');
-        setSelectedPayment(null);
-        alert('¡Pago procesado exitosamente!');
+            setPayments(payments.map(p =>
+                p.id === selectedPayment.id
+                    ? { ...p, status: 'completado', method: paymentMethod }
+                    : p
+            ));
+
+            setShowProcessModal(false);
+            setPaymentMethod('');
+            setSelectedPayment(null);
+            alert('¡Pago procesado exitosamente!');
+        } catch (err) {
+            console.error('Error al procesar el pago:', err);
+            alert('No se pudo procesar el pago. Inténtalo de nuevo.');
+        }
     };
 
     const totalPendiente = payments

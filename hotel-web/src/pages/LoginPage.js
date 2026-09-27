@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
 import PasswordResetModal from '../components/Modal/PasswordReset';
 import { auth } from '../firebase/config';
+import { loginOperator } from '../services/operatorsService';
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -19,19 +20,13 @@ function LoginPage() {
         try {
             // Primero intentar login de operador/admin
             if (email.includes('@hotel.com')) {
-                const response = await fetch('http://localhost:4000/api/operators/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                if (response.ok) {
-                    const operator = await response.json();
+                try {
+                    const operator = await loginOperator({ email, password });
                     console.log('Operador/Admin inició sesión:', operator);
-                    
+
                     // Guardar datos en localStorage
                     localStorage.setItem('operator', JSON.stringify(operator));
-                    
+
                     // Redirigir según rol
                     if (operator.role === 'admin') {
                         alert('¡Bienvenido Administrador!');
@@ -41,6 +36,9 @@ function LoginPage() {
                         navigate('/operador');
                     }
                     return;
+                } catch (operatorErr) {
+                    // Si el login de operador falla, continuamos con Firebase
+                    console.warn('Login de operador no disponible, usando Firebase:', operatorErr.message);
                 }
             }
             

@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import {
+    createOperator,
+    deleteOperator,
+    getOperators,
+    updateOperator,
+} from '../../services/operatorsService';
 
 function AdminUsers() {
     const [users, setUsers] = useState([]);
@@ -23,16 +29,10 @@ function AdminUsers() {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:4000/api/admin/operators');
-            
-            if (!response.ok) {
-                throw new Error('Error al obtener usuarios');
-            }
-            
-            const data = await response.json();
+            const data = await getOperators();
             setUsers(data);
             setLoading(false);
-            
+
         } catch (err) {
             console.error('Error al cargar usuarios:', err);
             setError(err.message);
@@ -128,25 +128,13 @@ function AdminUsers() {
         try {
             if (editingUser) {
                 // Actualizar usuario existente
-                const response = await fetch(`http://localhost:4000/api/admin/operators/${editingUser.operator_id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                
-                if (!response.ok) throw new Error('Error al actualizar usuario');
-                
+                await updateOperator(editingUser.operator_id, formData);
+
                 alert('Usuario actualizado correctamente');
             } else {
                 // Crear nuevo usuario
-                const response = await fetch('http://localhost:4000/api/admin/operators', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                
-                if (!response.ok) throw new Error('Error al crear usuario');
-                
+                await createOperator(formData);
+
                 alert('✅ Usuario creado correctamente en Firebase y Supabase.\n\nEl usuario ya puede iniciar sesión.');
             }
             
@@ -163,12 +151,8 @@ function AdminUsers() {
         if (!window.confirm('¿Estás seguro de eliminar este usuario?')) return;
         
         try {
-            const response = await fetch(`http://localhost:4000/api/admin/operators/${operatorId}`, {
-                method: 'DELETE'
-            });
-            
-            if (!response.ok) throw new Error('Error al eliminar usuario');
-            
+            await deleteOperator(operatorId);
+
             alert('Usuario eliminado correctamente');
             fetchUsers(); // Recargar lista
             

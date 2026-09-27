@@ -49,5 +49,3 @@ export function statusColor(status) {
       return 'bg-gray-600';
   }
 }
-
-export default { formatPrice, formatDate, statusColor };

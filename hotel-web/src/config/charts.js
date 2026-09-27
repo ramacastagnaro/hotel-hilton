@@ -25,9 +25,3 @@ export const CHART_COLORS = {
 
 // Canonical reservation statuses shown across the admin/operator surfaces.
 export const RESERVATION_STATUSES = ['pendiente', 'confirmada', 'completada', 'cancelada'];
-
-export default {
-  PAYMENT_METHOD_LABELS,
-  CHART_COLORS,
-  RESERVATION_STATUSES,
-};

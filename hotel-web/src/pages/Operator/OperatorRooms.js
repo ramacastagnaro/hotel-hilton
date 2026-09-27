@@ -4,6 +4,8 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import OperatorLayout from '../../components/Operator/OperatorLayout';
+import { getRooms, setRoomStatus } from '../../services/roomsService';
+import { formatPrice } from '../../utils/format';
 
 // Fix para los iconos de Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -28,10 +30,7 @@ function OperatorRooms() {
     const fetchRooms = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:4000/api/rooms');
-            if (!response.ok) throw new Error('Error al obtener habitaciones');
-            
-            const data = await response.json();
+            const data = await getRooms();
             // Agregar posiciones ficticias para el mapa y status por defecto
             const roomsWithPositions = data.map((room, index) => ({
                 ...room,
@@ -99,34 +98,34 @@ function OperatorRooms() {
         }
     };
 
-    const toggleRoomStatus = (roomId) => {
-        setRooms(rooms.map(room => {
-            if (room.room_id === roomId) {
-                let newStatus;
-                if (room.status === 'disponible') {
-                    newStatus = 'mantenimiento';
-                } else if (room.status === 'mantenimiento') {
-                    newStatus = 'disponible';
-                } else {
-                    return room; // No cambiar si está ocupada
-                }
-                return { ...room, status: newStatus };
-            }
-            return room;
-        }));
+    const toggleRoomStatus = async (roomId) => {
+        const room = rooms.find(r => r.room_id === roomId);
+        if (!room) return;
+
+        let newStatus;
+        if (room.status === 'disponible') {
+            newStatus = 'mantenimiento';
+        } else if (room.status === 'mantenimiento') {
+            newStatus = 'disponible';
+        } else {
+            return; // No cambiar si está ocupada
+        }
+
+        try {
+            // Persistir el cambio en el backend antes de reflejarlo en la UI
+            await setRoomStatus(roomId, newStatus);
+            setRooms(rooms.map(r =>
+                r.room_id === roomId ? { ...r, status: newStatus } : r
+            ));
+        } catch (err) {
+            console.error('Error al actualizar el estado de la habitación:', err);
+            alert('No se pudo actualizar el estado de la habitación');
+        }
     };
 
     const filteredRooms = filterStatus === 'all' 
         ? rooms 
         : rooms.filter(r => r.status === filterStatus);
-
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0
-        }).format(price);
-    };
 
     return (
         <OperatorLayout>

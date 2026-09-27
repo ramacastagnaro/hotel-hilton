@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
 import RoomDetailModal from '../components/Modal/RoomDetailModal';
 import TariffCard from '../components/TariffCard/TariffCard';
+import { getRoom } from '../services/roomsService';
 
 function RoomDetailPage() {
     const { id } = useParams();
@@ -35,13 +36,7 @@ function RoomDetailPage() {
         const fetchRoom = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`http://localhost:4000/api/rooms/${id}`);
-                
-                if (!response.ok) {
-                    throw new Error('Habitación no encontrada');
-                }
-                
-                const data = await response.json();
+                const data = await getRoom(id);
                 console.log('✅ Habitación obtenida:', data);
                 setRoom(data);
             } catch (err) {

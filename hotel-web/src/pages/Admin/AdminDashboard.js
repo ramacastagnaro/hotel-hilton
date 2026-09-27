@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { getAdminStats } from '../../services/statsService';
+import { formatPrice } from '../../utils/format';
 
 function AdminDashboard() {
     const [stats, setStats] = useState({
@@ -24,13 +26,7 @@ function AdminDashboard() {
         const fetchStats = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:4000/api/admin/stats');
-                
-                if (!response.ok) {
-                    throw new Error('Error al obtener estadísticas');
-                }
-                
-                const data = await response.json();
+                const data = await getAdminStats();
                 setStats({
                     totalUsers: data.totalUsers,
                     totalReservations: data.totalReservations,
@@ -49,14 +45,6 @@ function AdminDashboard() {
         
         fetchStats();
     }, []);
-
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0
-        }).format(price);
-    };
 
     if (loading) {
         return (
