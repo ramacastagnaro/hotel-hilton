@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 
 // Page Components
 import AboutPage from './pages/AboutPage';
@@ -38,6 +39,7 @@ import OperatorPayments from './pages/Operator/OperatorPayments';
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Rutas del Panel de Administración (sin Header/Footer, protegidas) */}
         {/* El rol demo accede en modo solo lectura (mismo allow-list que /admin). */}
@@ -56,7 +58,7 @@ function App() {
         
         {/* Rutas públicas (con Header/Footer) */}
         <Route path="/*" element={
-          <div className="flex flex-col min-h-screen bg-gray-100">
+          <div className="flex flex-col min-h-screen bg-surface-50">
             <Helmet>
               <title>Hotel Hilton - Tu escapada de lujo</title>
               <meta name="description" content="Disfruta de una experiencia única en Hotel Hilton" />
