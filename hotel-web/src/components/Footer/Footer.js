@@ -1,3 +1,5 @@
+import { HOTEL } from '../../config/hotel';
+
 function Footer() {
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300 mt-auto">
@@ -7,22 +9,22 @@ function Footer() {
           {/* Logo y descripción */}
           <div className="col-span-1 md:col-span-2">
             <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4 font-serif">
-              Hotel Hilton
+              {HOTEL.name}
             </h3>
             <p className="text-gray-400 leading-relaxed mb-4">
-              Tu destino de lujo y confort. Ofrecemos experiencias inolvidables con servicios de primera clase.
+              {HOTEL.description}
             </p>
             <div className="flex gap-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-500 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
+              <a href={HOTEL.social.facebook} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-500 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
                 <i className="fab fa-facebook-f text-white text-lg"></i>
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-pink-600 hover:to-purple-500 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
+              <a href={HOTEL.social.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-pink-600 hover:to-purple-500 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
                 <i className="fab fa-instagram text-white text-lg"></i>
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-300 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
+              <a href={HOTEL.social.twitter} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-300 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
                 <i className="fab fa-twitter text-white text-lg"></i>
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
+              <a href={HOTEL.social.linkedin} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
                 <i className="fab fa-linkedin-in text-white text-lg"></i>
               </a>
             </div>
@@ -53,15 +55,15 @@ function Footer() {
             <ul className="space-y-3 text-gray-400">
               <li className="flex items-start gap-3">
                 <i className="fas fa-map-marker-alt text-blue-400 mt-1"></i>
-                <span>Av. Arenales 742, Salta, Argentina</span>
+                <span>{HOTEL.address}</span>
               </li>
               <li className="flex items-center gap-3">
                 <i className="fas fa-phone text-blue-400"></i>
-                <span>+54 387 431-0000</span>
+                <span>{HOTEL.phone}</span>
               </li>
               <li className="flex items-center gap-3">
                 <i className="fas fa-envelope text-blue-400"></i>
-                <span>HiltonHoteles@gmail.com</span>
+                <span>{HOTEL.email}</span>
               </li>
             </ul>
           </div>

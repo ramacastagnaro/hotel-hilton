@@ -5,6 +5,7 @@ import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { useNavigate } from 'react-router-dom';
+import { HOTEL } from '../../config/hotel';
 
 function SearchHero() {
     const navigate = useNavigate();
@@ -73,7 +74,7 @@ function SearchHero() {
                         {/* --- MODIFICACIÓN AQUÍ --- */}
                         <input
                             type="text"
-                            value="Hotel Hilton"
+                            value={HOTEL.name}
                             readOnly
                             className="font-bold bg-transparent outline-none w-full font-serif text-lg text-gray-800" // <-- Añadido font-serif y text-lg
                         />
