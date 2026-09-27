@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import { getAdminReservations, updateStatus } from '../../services/reservationsService';
 import { formatDate, formatPrice, statusColor } from '../../utils/format';
 import { buttonStyles } from '../../utils/buttonStyles';
 
 function AdminReservations() {
+    const canMutate = useCanMutate();
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -196,14 +198,16 @@ function AdminReservations() {
                             </div>
 
                             {/* Botón de cambiar estado */}
-                            <div className="flex-shrink-0">
-                                <button
-                                    onClick={() => handleStatusChange(reservation.reservation_id, 'confirmada')}
-                                    className={buttonStyles({ variant: 'confirm' })}>
-                                    <i className="fas fa-check"></i>
-                                    <span>Confirmar</span>
-                                </button>
-                            </div>
+                            {canMutate && (
+                                <div className="flex-shrink-0">
+                                    <button
+                                        onClick={() => handleStatusChange(reservation.reservation_id, 'confirmada')}
+                                        className={buttonStyles({ variant: 'confirm' })}>
+                                        <i className="fas fa-check"></i>
+                                        <span>Confirmar</span>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import {
     createRoom,
     deleteRoom,
@@ -11,6 +12,7 @@ import { formatPrice } from '../../utils/format';
 import { buttonStyles } from '../../utils/buttonStyles';
 
 function AdminRooms() {
+    const canMutate = useCanMutate();
     const [rooms, setRooms] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -157,12 +159,14 @@ function AdminRooms() {
                     <i className="fas fa-bed text-white text-3xl"></i>
                     <h1 className="text-3xl font-bold text-white">Gestión de Habitaciones ({rooms.length})</h1>
                 </div>
-                <button
-                    onClick={handleNewRoom}
-                    className={buttonStyles({ variant: 'primary' })}>
-                    <i className="fas fa-plus"></i>
-                    <span>Nueva Habitación</span>
-                </button>
+                {canMutate && (
+                    <button
+                        onClick={handleNewRoom}
+                        className={buttonStyles({ variant: 'primary' })}>
+                        <i className="fas fa-plus"></i>
+                        <span>Nueva Habitación</span>
+                    </button>
+                )}
             </div>
 
             {/* Grid de habitaciones */}
@@ -199,20 +203,22 @@ function AdminRooms() {
                             </div>
 
                             {/* Botones de acción */}
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => handleEdit(room)}
-                                    className={buttonStyles({ variant: 'secondary', className: 'flex-1' })}>
-                                    <i className="fas fa-edit"></i>
-                                    <span>Editar</span>
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(room.room_id)}
-                                    className={buttonStyles({ variant: 'destructive', className: 'flex-1' })}>
-                                    <i className="fas fa-trash"></i>
-                                    <span>Eliminar</span>
-                                </button>
-                            </div>
+                            {canMutate && (
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => handleEdit(room)}
+                                        className={buttonStyles({ variant: 'secondary', className: 'flex-1' })}>
+                                        <i className="fas fa-edit"></i>
+                                        <span>Editar</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(room.room_id)}
+                                        className={buttonStyles({ variant: 'destructive', className: 'flex-1' })}>
+                                        <i className="fas fa-trash"></i>
+                                        <span>Eliminar</span>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}

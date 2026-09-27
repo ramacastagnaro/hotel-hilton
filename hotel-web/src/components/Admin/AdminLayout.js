@@ -6,7 +6,7 @@ import { buttonStyles } from '../../utils/buttonStyles';
 function AdminLayout({ children }) {
     const location = useLocation();
     const navigate = useNavigate();
-    const { logout } = useAuth();
+    const { logout, isDemo } = useAuth();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const menuItems = [
@@ -92,6 +92,14 @@ function AdminLayout({ children }) {
 
             {/* Contenido principal */}
             <div className={`transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
+                {/* Aviso de solo lectura (rol demo) */}
+                {isDemo && (
+                    <div
+                        role="status"
+                        className="bg-gold-500 text-navy-950 text-center text-sm font-semibold py-2 px-4">
+                        Estás en modo demo: solo lectura.
+                    </div>
+                )}
                 {/* Header superior */}
                 <header className="bg-slate-800/50 backdrop-blur-md border-b border-navy-500/30 sticky top-0 z-40">
                     <div className="px-6 py-4 flex items-center justify-between">

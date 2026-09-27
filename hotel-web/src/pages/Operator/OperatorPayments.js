@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import OperatorLayout from '../../components/Operator/OperatorLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import { getReservations, updatePayment } from '../../services/reservationsService';
 import { formatPrice } from '../../utils/format';
 import { buttonStyles } from '../../utils/buttonStyles';
 
 function OperatorPayments() {
+    const canMutate = useCanMutate();
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -205,7 +207,7 @@ function OperatorPayments() {
                                         <span className={`px-4 py-2 ${getStatusColor(payment.status)} text-white text-sm font-bold rounded-lg text-center`}>
                                             {payment.status}
                                         </span>
-                                        {payment.status === 'pendiente' && (
+                                        {canMutate && payment.status === 'pendiente' && (
                                             <button
                                                 onClick={() => handleProcessPayment(payment)}
                                                 className={buttonStyles({ variant: 'confirm' })}>

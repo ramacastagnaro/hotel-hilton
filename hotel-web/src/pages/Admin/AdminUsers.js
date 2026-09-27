@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import AdminLayout from '../../components/Admin/AdminLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import {
     createOperator,
     deleteOperator,
@@ -10,6 +11,7 @@ import {
 import { buttonStyles } from '../../utils/buttonStyles';
 
 function AdminUsers() {
+    const canMutate = useCanMutate();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -175,12 +177,14 @@ function AdminUsers() {
                     <i className="fas fa-users text-white text-3xl"></i>
                     <h1 className="text-3xl font-bold text-white">Gestión de Usuarios ({users.length})</h1>
                 </div>
-                <button
-                    onClick={handleNewUser}
-                    className={buttonStyles({ variant: 'primary' })}>
-                    <i className="fas fa-plus"></i>
-                    <span>Nuevo Usuario</span>
-                </button>
+                {canMutate && (
+                    <button
+                        onClick={handleNewUser}
+                        className={buttonStyles({ variant: 'primary' })}>
+                        <i className="fas fa-plus"></i>
+                        <span>Nuevo Usuario</span>
+                    </button>
+                )}
             </div>
 
             {/* Lista de usuarios */}
@@ -225,20 +229,22 @@ function AdminUsers() {
                                 </div>
 
                                 {/* Botones de acción */}
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => handleEdit(user)}
-                                        className={buttonStyles({ variant: 'secondary' })}>
-                                        <i className="fas fa-edit"></i>
-                                        <span>Editar</span>
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(user.operator_id)}
-                                        className={buttonStyles({ variant: 'destructive' })}>
-                                        <i className="fas fa-trash"></i>
-                                        <span>Eliminar</span>
-                                    </button>
-                                </div>
+                                {canMutate && (
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => handleEdit(user)}
+                                            className={buttonStyles({ variant: 'secondary' })}>
+                                            <i className="fas fa-edit"></i>
+                                            <span>Editar</span>
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(user.operator_id)}
+                                            className={buttonStyles({ variant: 'destructive' })}>
+                                            <i className="fas fa-trash"></i>
+                                            <span>Eliminar</span>
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -12,6 +12,7 @@ function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [demoLoading, setDemoLoading] = useState(false);
     const [showResetModal, setShowResetModal] = useState(false); // Corregido nombre de estado
 
     const handleEmailSubmit = async (e) => {
@@ -64,6 +65,63 @@ function LoginPage() {
             } else {
                 setError('Ocurrió un error al iniciar sesión. Inténtalo de nuevo.');
             }
+        }
+    };
+
+    const handleDemoLogin = async () => {
+        setError('');
+        setDemoLoading(true);
+
+        // Credenciales de la cuenta demo desde el entorno (nunca hardcodeadas).
+        // Son PÚBLICAS: CRA las inlinea en el bundle; se acepta porque el rol
+        // demo es de solo lectura.
+        const demoEmail = process.env.REACT_APP_DEMO_EMAIL;
+        const demoPassword = process.env.REACT_APP_DEMO_PASSWORD;
+
+        try {
+            if (!demoEmail || !demoPassword) {
+                setError('La demo no está configurada en este entorno.');
+                return;
+            }
+
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                demoEmail,
+                demoPassword
+            );
+
+            try {
+                const idToken = await userCredential.user.getIdToken();
+                const operator = await loginOperator({ idToken });
+                localStorage.setItem('operator', JSON.stringify(operator));
+
+                // El rol demo entra al panel de administración en solo lectura.
+                navigate(operator.role === 'operador' ? '/operador' : '/admin');
+                return;
+            } catch (operatorErr) {
+                // 403/404 => la cuenta existe en Firebase pero todavía no tiene
+                // fila en `operators` (demo sin provisionar). No es un crash.
+                if (operatorErr.status !== 403 && operatorErr.status !== 404) {
+                    throw operatorErr;
+                }
+                console.warn('La cuenta demo no es operador:', operatorErr.message);
+                setError(
+                    'La cuenta demo todavía no está habilitada. Contactá al administrador.'
+                );
+            }
+        } catch (err) {
+            console.error('Error de login demo:', err.code, err.message);
+            if (
+                err.code === 'auth/user-not-found' ||
+                err.code === 'auth/wrong-password' ||
+                err.code === 'auth/invalid-credential'
+            ) {
+                setError('La cuenta demo no está disponible o las credenciales no son válidas.');
+            } else {
+                setError('No se pudo iniciar la demo. Inténtalo de nuevo.');
+            }
+        } finally {
+            setDemoLoading(false);
         }
     };
 
@@ -156,6 +214,30 @@ function LoginPage() {
                         </button>
                     </div>
                 </form>
+
+                {/* Acceso demo de solo lectura */}
+                <div className="mt-6">
+                    <button
+                        type="button"
+                        onClick={handleDemoLogin}
+                        disabled={demoLoading}
+                        className={buttonStyles({ variant: 'secondary', size: 'lg', className: 'w-full gap-2' })}>
+                        {demoLoading ? (
+                            <>
+                                <i className="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                                <span>Ingresando…</span>
+                            </>
+                        ) : (
+                            <>
+                                <i className="fas fa-eye" aria-hidden="true"></i>
+                                <span>Entrar como demo</span>
+                            </>
+                        )}
+                    </button>
+                    <p className="text-center text-xs text-gray-500 mt-2">
+                        Acceso de solo lectura para recorrer los paneles.
+                    </p>
+                </div>
 
                 <div className="my-8 flex items-center justify-center">
                     <span className="bg-gradient-to-r from-transparent via-gray-300 to-transparent h-px flex-grow"></span>

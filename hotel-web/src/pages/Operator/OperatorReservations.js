@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import OperatorLayout from '../../components/Operator/OperatorLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import {
     cancelReservation,
     getReservations,
@@ -10,6 +11,7 @@ import { buttonStyles } from '../../utils/buttonStyles';
 import { formatDate, formatPrice, statusColor } from '../../utils/format';
 
 function OperatorReservations() {
+    const canMutate = useCanMutate();
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -197,29 +199,33 @@ function OperatorReservations() {
                                     <i className="fas fa-eye"></i>
                                     <span>Ver</span>
                                 </button>
-                                {reservation.status === 'pendiente' && (
-                                    <button
-                                        onClick={() => handleConfirm(reservation.reservation_id)}
-                                        className={buttonStyles({ variant: 'confirm', size: 'sm' })}>
-                                        <i className="fas fa-check"></i>
-                                        <span>Confirmar</span>
-                                    </button>
-                                )}
-                                {reservation.status === 'confirmada' && (
-                                    <button
-                                        onClick={() => handleComplete(reservation.reservation_id)}
-                                        className={buttonStyles({ variant: 'primary', size: 'sm' })}>
-                                        <i className="fas fa-check-double"></i>
-                                        <span>Completar</span>
-                                    </button>
-                                )}
-                                {reservation.status !== 'cancelada' && reservation.status !== 'completada' && (
-                                    <button
-                                        onClick={() => handleLiberate(reservation.reservation_id)}
-                                        className={buttonStyles({ variant: 'destructive', size: 'sm' })}>
-                                        <i className="fas fa-times"></i>
-                                        <span>Liberar</span>
-                                    </button>
+                                {canMutate && (
+                                    <>
+                                        {reservation.status === 'pendiente' && (
+                                            <button
+                                                onClick={() => handleConfirm(reservation.reservation_id)}
+                                                className={buttonStyles({ variant: 'confirm', size: 'sm' })}>
+                                                <i className="fas fa-check"></i>
+                                                <span>Confirmar</span>
+                                            </button>
+                                        )}
+                                        {reservation.status === 'confirmada' && (
+                                            <button
+                                                onClick={() => handleComplete(reservation.reservation_id)}
+                                                className={buttonStyles({ variant: 'primary', size: 'sm' })}>
+                                                <i className="fas fa-check-double"></i>
+                                                <span>Completar</span>
+                                            </button>
+                                        )}
+                                        {reservation.status !== 'cancelada' && reservation.status !== 'completada' && (
+                                            <button
+                                                onClick={() => handleLiberate(reservation.reservation_id)}
+                                                className={buttonStyles({ variant: 'destructive', size: 'sm' })}>
+                                                <i className="fas fa-times"></i>
+                                                <span>Liberar</span>
+                                            </button>
+                                        )}
+                                    </>
                                 )}
                             </div>
                         </div>

@@ -4,6 +4,7 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import OperatorLayout from '../../components/Operator/OperatorLayout';
+import { useCanMutate } from '../../hooks/useCanMutate';
 import { getRooms, setRoomStatus } from '../../services/roomsService';
 import { formatPrice } from '../../utils/format';
 import { buttonStyles } from '../../utils/buttonStyles';
@@ -17,6 +18,7 @@ L.Icon.Default.mergeOptions({
 });
 
 function OperatorRooms() {
+    const canMutate = useCanMutate();
     const [rooms, setRooms] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -234,7 +236,7 @@ function OperatorRooms() {
                                         <span className={`px-3 py-1 ${getStatusColor(room.status || 'disponible')} text-white text-xs font-bold rounded-full text-center`}>
                                             {room.status || 'disponible'}
                                         </span>
-                                        {room.status !== 'ocupada' && (
+                                        {canMutate && room.status !== 'ocupada' && (
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();

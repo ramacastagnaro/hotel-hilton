@@ -1,50 +1,21 @@
-import { signOut } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { auth } from '../../firebase/config';
-import { getOperators } from '../../services/operatorsService';
 import { buttonStyles } from '../../utils/buttonStyles';
 
 function Header() {
-  const { currentUser } = useAuth();
-  console.log('Usuario actual en Header:', currentUser);
+  const { currentUser, role, isDemo, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [operatorData, setOperatorData] = useState(null);
-  
-  // Verificar si el usuario es operador/admin
-  useEffect(() => {
-    console.log('🔍 Verificando si es operador...', currentUser?.email);
-    
-    const checkOperator = async () => {
-      if (currentUser?.email) {
-        try {
-          console.log('📡 Llamando a API de operadores...');
-          const operators = await getOperators();
-          console.log('📋 Operadores obtenidos:', operators);
 
-          const operator = operators.find(op => op.email === currentUser.email);
-          if (operator) {
-            console.log('✅ Operador encontrado:', operator);
-            setOperatorData(operator);
-          } else {
-            console.log('❌ No es operador:', currentUser.email);
-          }
-        } catch (err) {
-          console.error('❌ Error al verificar operador:', err);
-        }
-      } else {
-        console.log('⚠️ No hay usuario logueado');
-      }
-    };
-    
-    checkOperator();
-  }, [currentUser]);
+  // Autorización resuelta vía `/api/auth/me` en el AuthContext: ya no se llama
+  // al endpoint admin-only `/api/admin/operators` para detectar el rol.
+  const isAdmin = role === 'admin';
+  const isOperator = role === 'operador';
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      await logout();
       setIsMenuOpen(false);
       navigate('/');
       alert('Has cerrado sesión.');
@@ -114,8 +85,16 @@ function Header() {
                         </span>
                       </Link>
                       
+                      {/* Aviso de sesión demo (solo lectura) */}
+                      {isDemo && (
+                        <div className="mx-2 mt-1 px-4 py-2 rounded-lg bg-gold-50 border border-gold-200 text-xs font-semibold text-navy-800 flex items-center gap-2">
+                          <i className="fas fa-eye text-gold-600"></i>
+                          <span>Modo demo · solo lectura</span>
+                        </div>
+                      )}
+
                       {/* Botón Panel Admin */}
-                      {operatorData?.role === 'admin' && (
+                      {(isAdmin || isDemo) && (
                         <Link
                           to="/admin"
                           onClick={() => setIsMenuOpen(false)}
@@ -128,7 +107,7 @@ function Header() {
                       )}
                       
                       {/* Botón Panel Operador */}
-                      {operatorData?.role === 'operador' && (
+                      {(isOperator || isDemo) && (
                         <Link
                           to="/operador"
                           onClick={() => setIsMenuOpen(false)}
