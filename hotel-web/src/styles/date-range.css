@@ -1,0 +1,157 @@
+/*
+ * Brand skin for react-date-range (Navy + Gold design tokens).
+ *
+ * Imported from SearchHero AFTER the library styles (styles.css / theme) so
+ * these overrides win the cascade. The raw hex values mirror the Tailwind
+ * tokens declared in tailwind.config.js (navy/gold scales).
+ */
+
+.rdrDateRangeWrapper {
+  font-family: Montserrat, system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  border-radius: 1rem;
+}
+
+@media (min-width: 768px) {
+  .rdrDateRangeWrapper {
+    font-size: 14px;
+  }
+}
+
+.rdrCalendarWrapper {
+  color: #0a1a35; /* navy-900 */
+  background: #ffffff;
+}
+
+/* The search bar already shows a start/end summary, so the library's redundant
+   header inputs ("Early" / "Continuous") are hidden entirely. */
+.rdrDateDisplayWrapper {
+  display: none;
+}
+
+/* --- Month / year header ------------------------------------------------- */
+.rdrMonthAndYearWrapper {
+  align-items: center;
+  padding: 0.75rem 0.5rem 0.25rem;
+}
+
+.rdrMonthAndYearPickers {
+  font-weight: 600;
+  color: #0f2143; /* navy-800 */
+}
+
+.rdrMonthAndYearPickers select {
+  color: #0f2143; /* navy-800 */
+  font-weight: 600;
+  border-radius: 0.5rem;
+}
+
+.rdrMonthAndYearPickers select:hover {
+  background-color: #eef2f8; /* navy-50 */
+}
+
+.rdrNextPrevButton {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: #eef2f8; /* navy-50 */
+}
+
+.rdrNextPrevButton:hover {
+  background: #d7e0ee; /* navy-100 */
+}
+
+/* Keep the chevrons on brand instead of the library's default slate. */
+.rdrPprevButton i {
+  border-right-color: #1e3f73; /* navy-600 */
+}
+
+.rdrNextButton i {
+  border-left-color: #1e3f73; /* navy-600 */
+}
+
+/* --- Month name / weekdays ---------------------------------------------- */
+.rdrMonthName {
+  color: #1e3f73; /* navy-600 */
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem 0.25rem;
+}
+
+.rdrWeekDay {
+  color: #2e5791; /* navy-500 */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.65rem;
+  line-height: 2.5em;
+}
+
+/* --- Day cells ---------------------------------------------------------- */
+.rdrDayNumber span {
+  color: #0a1a35; /* navy-900 */
+  font-weight: 400;
+}
+
+.rdrDayPassive .rdrDayNumber span {
+  color: #afc2dd; /* navy-200 */
+}
+
+.rdrDayDisabled .rdrDayNumber span {
+  color: #afc2dd; /* navy-200 */
+}
+
+/* Subtle hover highlight applied to the cell so it never hides the range fill. */
+.rdrDay:not(.rdrDayPassive):not(.rdrDayDisabled):hover {
+  background: #eef2f8; /* navy-50 */
+  border-radius: 1.042em;
+}
+
+/* --- Today indicator (gold) --------------------------------------------- */
+.rdrDayToday .rdrDayNumber span {
+  color: #8c6a24; /* gold-700 */
+  font-weight: 700;
+}
+
+.rdrDayToday .rdrDayNumber span:after {
+  background: #c9a24b; /* gold-500 */
+}
+
+.rdrDayToday:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span:after,
+.rdrDayToday:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span:after,
+.rdrDayToday:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span:after,
+.rdrDayToday:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span:after {
+  background: #b0862f; /* gold-600 */
+}
+
+/* --- Range fill + edges ------------------------------------------------- */
+.rdrInRange {
+  background: #d7e0ee; /* navy-100 */
+}
+
+.rdrStartEdge,
+.rdrEndEdge,
+.rdrSelected {
+  background: #c9a24b; /* gold-500 */
+}
+
+/* Text on filled cells: override the library's low-contrast white. */
+.rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span {
+  color: #0f2143; /* navy-800 on navy-100 */
+}
+
+.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
+  color: #060f22; /* navy-950 on gold */
+}
+
+/* --- Range preview while picking (gold tint) ---------------------------- */
+.rdrDayStartPreview,
+.rdrDayInPreview,
+.rdrDayEndPreview {
+  background: rgba(201, 162, 75, 0.18); /* gold-500 tint */
+  border-color: #ddbb5a; /* gold-300 */
+}
