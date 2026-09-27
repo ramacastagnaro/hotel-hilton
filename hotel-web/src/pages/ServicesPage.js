@@ -70,7 +70,7 @@ function ServicesPage() {
                         <Slider {...sliderSettings}>
                             {service.images.map((image, index) => (
                                 <div key={index}>
-                                    <img src={image} alt={`${service.title} ${index + 1}`} className="w-full h-56 object-cover" />
+                                    <img src={image} alt={`${service.title} ${index + 1}`} loading="lazy" decoding="async" className="w-full h-56 object-cover" />
                                 </div>
                             ))}
                         </Slider>

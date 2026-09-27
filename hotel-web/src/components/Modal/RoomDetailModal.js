@@ -31,6 +31,8 @@ function RoomDetailModal({ room, onClose }) {
                                 <img
                                     src={image}
                                     alt={`${room.name} ${index + 1}`}
+                                    loading="lazy"
+                                    decoding="async"
                                     className="w-full h-72 object-cover"
                                 />
                             </div>
